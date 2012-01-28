@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<!-- Header -->
+{% endblock %}
+
+{% block nav_list %}<li id="menuList" class="activePage"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}
+
+ 
+{% block body %}
+
+{% for album in album_list %}
+    <div>
+    	<a href="{{ album.get_absolute_url }}"> {{ album.name }} </a>
+    </div>
+{% empty %}
+    No albums published.
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<!-- Header -->
+{% endblock %}
+
+{% block body %}
+
+<div>
+	Name: {{ album.name }}
+</div>
+<div>
+	Height: {{ album.height }}
+</div>
+<div>
+	Width: {{ album.width }}
+</div>
+
+{% for page in page_list %}
+    <div>
+    	<a href="{{ page.get_absolute_url }}"> {{ page.number }} </a>
+    </div>
+{% empty %}
+    No pages added.
+{% endfor %}
+
+{% endblock %}

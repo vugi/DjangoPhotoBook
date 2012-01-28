@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+{% block header %}
+{% endblock %}
+
+<title>PhotoBook</title>
+</head>
+<body>
+    <div id="innerBody">
+       	<div id="header">
+            <a id="serviceTitle" href="{% url photobook:index %}">PhotoBook</a>
+            <ul id="serviceNav">
+                {% block nav %}
+                    {% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}                 
+                	{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}                    
+                {% endblock %}
+            </ul>
+        </div>
+        <div id="content">
+            <!--<div class="content-box">-->
+	            {% block body %}
+	            {% endblock %}
+	        <!--</div>-->
+        </div>
+  	</div>
+</body>
+</html>
+
