@@ -18,7 +18,8 @@
             <ul id="serviceNav">
                 {% block nav %}
                     {% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}                 
-                	{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}                    
+                	{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}    
+					{% block nav_logout %}<li id="menuList"><a href="{% url photobook:logout %}">Logout</a></li>{% endblock %}    
                 {% endblock %}
             </ul>
         </div>

@@ -108,6 +108,10 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'django_photobook.urls'
 
+LOGIN_URL = "/login/"
+
+LOGOUT_URL = "/logout/"
+
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -123,7 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'photobook',
-    'south',
+    #'south',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

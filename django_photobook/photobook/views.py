@@ -2,13 +2,14 @@
 from django.conf import settings
 from django.views.generic import View, CreateView, DeleteView, DetailView, TemplateView, UpdateView, ListView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.contrib.auth.decorators import login_required
 
 # Photobook project imports
 from photobook.models import *
 
 class Index(TemplateView):
     template_name = 'photobook/index.html'
-    
+	
 # Detail view for Albums
 class AlbumListView(ListView):
 
