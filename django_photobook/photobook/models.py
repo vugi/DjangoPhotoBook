@@ -53,8 +53,8 @@ class Album(models.Model):
     #user
     name = models.CharField(max_length=255)
     pub_date = models.DateField()
-    height = models.PositiveIntegerField() #cm
-    width = models.PositiveIntegerField() #cm
+    height = models.PositiveIntegerField() #px or cm?
+    width = models.PositiveIntegerField() #px or cm?
     
     def __unicode__(self):
         return self.name
@@ -77,4 +77,4 @@ class Page(models.Model):
         return '%s, %s' % (self.album, self.number)
     
     def get_absolute_url(self):
-        return '/album/%i/%i/' % (self.album.id, self.id)
+        return '/album/%i/%i/' % (self.album.id, self.number)

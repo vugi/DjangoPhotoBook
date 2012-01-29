@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<!-- Header -->
+{% endblock %}
+
+{% block body %}
+
+<div>
+	{{ number }} Page number: {{ page.number }}
+</div>
+<div>
+	Album: {{ page.album.name }}
+</div>
+
+<div class="book" style="
+					position:relative;
+		    		background-color:blue;
+					height: 400px;
+					width: 600px;">
+	{% if page.images %}
+		{% for image in page.images.all %}
+		    <div>
+		    	<img src="{{ image.url }}" style="
+		    		position:absolute; 
+					left: {{ image.position.x }}px; 
+					top: {{ image.position.y }}px;
+					height: {{ image.position.h }}px;
+					width: {{ image.position.w }}px;"/>
+		    </div>
+		{% endfor %}    
+	{% else %}
+	    No images added.
+	{% endif %}
+	
+	{% for caption in page.captions.all %}
+	    <div style="position:absolute; 
+					left: {{ caption.position.x }}px; 
+					top: {{ caption.position.y }}px;">
+	    	{{ caption.content }}
+	    </div>
+	{% empty %}
+	    <div> No captions added.</div>
+	{% endfor %}
+</div>
+
+{% endblock %}
