@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 #from django.contrib.auth.decorators import login_required
 
 from models import *
-from views import (Index, AlbumDetailView)
+from views import (Index, AlbumDetailView, register)
 
 urlpatterns = patterns('',
     url(r'^$', Index.as_view(), name='index'),
@@ -24,5 +24,7 @@ urlpatterns = patterns('',
 	url(r'^login/$', 'django.contrib.auth.views.login'),
 	#logout view
 	url(r'^logout/$', 'django.contrib.auth.views.logout', name="logout"),
+	#register view
+	url(r'^register/$', register, name="register"),
 	
 )
