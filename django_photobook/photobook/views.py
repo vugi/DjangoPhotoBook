@@ -55,3 +55,11 @@ def register(request):
     return render_to_response("registration/register.html", {
         'form' : form
     }, context_instance=RequestContext(request))
+    
+def user_view(request, user_id):
+    if (request.user.is_authenticated() && request.user.id == user_id):
+        str = "You are looking at your own page"
+    else:
+        str = "You are looking at someone else's page"
+    album_list = Album.objects.filter(user__id=user_id)
+    return render_to_response('photobook/user_detail.html', {'user' : request.user, 'str' : str, 'album_list' : album_list }, context_instance=RequestContext(request))
