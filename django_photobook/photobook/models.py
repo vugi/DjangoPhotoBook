@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -50,7 +51,7 @@ class Album(models.Model):
     '''Photo album'''
     class Meta:
         ordering = ['-pub_date']
-    #user
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=255)
     pub_date = models.DateField()
     height = models.PositiveIntegerField() #px or cm?

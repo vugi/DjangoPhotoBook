@@ -18,7 +18,8 @@
             <ul id="serviceNav">
                 {% block nav %}
                     {% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}                 
-                	{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}    
+                	{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}
+                    {% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">User albums</a></li>{% endblock %}
 					{% block nav_logout %}<li id="menuLogout"><a href="{% url photobook:logout %}">Logout</a></li>{% endblock %}
 					{% block nav_register %}<li id="menuRegister"><a href="{% url photobook:register %}">Register</a></li>{% endblock %}   					
                 {% endblock %}

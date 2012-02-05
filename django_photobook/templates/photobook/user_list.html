@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<!-- Header -->
+{% endblock %}
+ 
+{% block body %}
+
+{% for user in user_list %}
+    <div>
+    	<a href="{{ user.get_absolute_url }}"> {{ user.username }} </a>
+    </div>
+{% empty %}
+    No users registered
+{% endfor %}
+
+{% endblock %}

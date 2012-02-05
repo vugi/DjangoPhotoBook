@@ -36,7 +36,12 @@ def page_detail(request, album, page_number):
     album_pages = Page.objects.filter(album__id=album)
     page = album_pages.get(number=page_number)    
     return render_to_response('photobook/page_detail.html', {'page': page}, context_instance=RequestContext(request))
-
+#List view for users
+class UserListView(ListView):
+    model = User
+    template_name = 'photobook/user_list.html'
+    context_object_name = "user_list"
+    
 # Register view
 def register(request):
 
@@ -55,3 +60,11 @@ def register(request):
     return render_to_response("registration/register.html", {
         'form' : form
     }, context_instance=RequestContext(request))
+    
+def user_view(request, user_name):
+    if (request.user.is_authenticated() and request.user.username == user_name):
+        str = "You are looking at your own page"
+    else:
+        str = "You are looking at someone else's page"
+    userName = request.user.username
+    return render_to_response('photobook/user_detail.html', {'user' : request.user, 'str' : str, 'owner' : user_name }, context_instance=RequestContext(request))
