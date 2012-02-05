@@ -23,5 +23,9 @@ urlpatterns = patterns('',
 	url(r'^logout/$', 'django.contrib.auth.views.logout', name="logout"),
 	#register view
 	url(r'^register/$', register, name="register"),
+    #user list
+    url(r'^user/$', login_required(ListView.as_view(model = User, template_name = 'photobook/user_list.html')), name='user_list_view'),
+    #user detail view
+    url(r'^users/(?P<user_name>\S+)/$', user_view, name="user_view"),
 	
 )
