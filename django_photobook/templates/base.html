@@ -5,6 +5,7 @@
 <head>
 
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen" />
 
 {% block header %}
 {% endblock %}
@@ -12,26 +13,24 @@
 <title>PhotoBook</title>
 </head>
 <body>
-    <div id="innerBody">
-       	<div id="header">
-            <a id="serviceTitle" href="{% url photobook:index %}">PhotoBook</a>
-            <ul id="serviceNav">
-                {% block nav %}
-                    {% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}                 
-                	{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}
-                    {% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">User albums</a></li>{% endblock %}
-					{% block nav_logout %}<li id="menuLogout"><a href="{% url photobook:logout %}">Logout</a></li>{% endblock %}
-					{% block nav_register %}<li id="menuRegister"><a href="{% url photobook:register %}">Register</a></li>{% endblock %}   					
-                {% endblock %}
-            </ul>
-        </div>
-        <div id="content">
-            <!--<div class="content-box">-->
-	            {% block body %}
-	            {% endblock %}
-	        <!--</div>-->
-        </div>
-  	</div>
+	<header>
+		<a id="serviceTitle" href="{% url photobook:index %}">PhotoBook</a>
+		<ul id="serviceNav">
+			{% block nav %}
+				{% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}                                 	
+				{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}
+				{% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">User albums</a></li>{% endblock %}
+				{% block nav_logout %}<li id="menuLogout"><a href="{% url photobook:logout %}">Logout</a></li>{% endblock %}
+				{% block nav_register %}<li id="menuRegister"><a href="{% url photobook:register %}">Register</a></li>{% endblock %}   					
+			{% endblock %}
+		</ul>
+	</header>
+	<section id="content">
+		<!--<div class="content-box">-->
+			{% block body %}
+			{% endblock %}
+		<!--</div>-->
+	</section>
 </body>
 </html>
 
