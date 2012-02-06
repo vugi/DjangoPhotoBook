@@ -13,11 +13,11 @@
 	Album: {{ page.album.name }}
 </div>
 
-<div class="book" style="
-					position:relative;
-		    		background-color:blue;
-					height: 400px;
-					width: 600px;">
+<div id="pageContainer">
+
+<a href="#" class="arrow left"></a>
+
+<article class="page" style="height: 400px; width: 600px;">
 	{% if page.images %}
 		{% for image in page.images.all %}
 		    <div>
@@ -42,6 +42,10 @@
 	{% empty %}
 	    <div> No captions added.</div>
 	{% endfor %}
+</article>
+
+<a href="#" class="arrow right"></a>
+
 </div>
 
 {% endblock %}
