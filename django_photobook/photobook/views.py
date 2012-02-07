@@ -7,6 +7,10 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
+from django.core import serializers
+from django.core.exceptions import ValidationError
+
+import json
 
 # Photobook project imports
 from photobook.models import *
@@ -68,3 +72,27 @@ def user_view(request, user_name):
         str = "You are looking at someone else's page"
     userName = request.user.username
     return render_to_response('photobook/user_detail.html', {'user' : request.user, 'str' : str, 'owner' : user_name }, context_instance=RequestContext(request))
+
+def json_get_page(request, album_id, page_id):
+    album_pages = Page.objects.filter(album__id=album_id)
+    page = album_pages.filter(number=page_id) 
+    data = serializers.serialize('json', page, use_natural_keys=True)
+    return HttpResponse(data, content_type='application/json')
+
+def json_save_page(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            #data = 'Raw Data: "%s"' % request.raw_post_data 
+            '''validation not working'''
+            try:
+                for obj in serializers.deserialize("json", request.raw_post_data):
+                    try:
+                        obj.object.full_clean()
+                    except ValidationError, e:
+                        return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), content_type='application/json')
+                    obj.save()
+            except ValidationError, e:
+                return HttpResponse(json.dumps({'success': False, 'message': e.messages}), content_type='application/json')    
+    return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
+
+    

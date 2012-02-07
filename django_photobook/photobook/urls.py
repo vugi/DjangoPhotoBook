@@ -27,5 +27,9 @@ urlpatterns = patterns('',
     url(r'^user/$', login_required(ListView.as_view(model = User, template_name = 'photobook/user_list.html')), name='user_list_view'),
     #user detail view
     url(r'^users/(?P<user_name>\S+)/$', user_view, name="user_view"),
-	
+    
+    #json get page information
+    url(r'^json_get_page/(?P<album_id>\d+)/(?P<page_id>\d+)', json_get_page, name='json_get_page'),
+	#json add new page
+    url(r'^json_save_page/$', json_save_page, name='json_save_page'),
 )

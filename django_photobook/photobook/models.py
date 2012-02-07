@@ -16,12 +16,16 @@ class Position(models.Model):
     '''Position of a layout element'''
     x = models.IntegerField() #default values?
     y = models.IntegerField() 
-    z = models.IntegerField(blank=True, null=True) 
+    z = models.IntegerField(default=0) 
     h = models.PositiveIntegerField() 
     w = models.PositiveIntegerField() 
     
     def __unicode__(self):
-        return '%s, %s, %s, %s' % (self.x, self.y, self.h, self.w)
+        return '%s, %s, %s, %s, %s' % (self.x, self.y, self.z, self.h, self.w)
+    
+    def natural_key(self):
+        return (self.x, self.y, self.z, self.h, self.w)
+    
     
 class Caption(models.Model):
     '''Caption on a page'''
@@ -39,7 +43,11 @@ class Image(models.Model):
     
     def __unicode__(self):
         return self.url
-    
+
+    def natural_key(self):
+        return (self.url, self.position.natural_key())
+    natural_key.dependencies = ['photobook.position']
+        
 class Layout(models.Model):
     '''Layout of a page'''
     position = models.ManyToManyField(Position)
@@ -67,9 +75,10 @@ class Page(models.Model):
     '''Single page of an album'''
     class Meta:
         ordering = ['number']
+        unique_together = ("album", "number")
         
     album = models.ForeignKey(Album) 
-    layout = models.ForeignKey(Layout)
+    #layout = models.ForeignKey(Layout)
     images = models.ManyToManyField(Image, blank=True, null=True) #vai mielummin foreign key?
     captions = models.ManyToManyField(Caption, blank=True, null=True)
     number = models.PositiveIntegerField()

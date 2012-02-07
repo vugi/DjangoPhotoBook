@@ -127,7 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'photobook',
-    #'south',
+    'south',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -156,3 +156,8 @@ LOGGING = {
         },
     }
 }
+
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+SQLITE_3 = os.path.join(PROJECT_PATH, 'photobook_db.db')
+
