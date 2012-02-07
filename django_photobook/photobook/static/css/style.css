@@ -1,1 +1,105 @@
 /* Photobook styles */
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 1.625;
+	color: #6E6E6E;
+	background-color: #eee;
+}
+
+a {
+	text-decoration: none;
+	color: #607890;
+}
+
+/* Header & navigation */
+
+header {
+	background-color: lightgrey;
+	border-bottom: 1px solid gray;
+}
+
+#serviceTitle {
+	float: left;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+#serviceTitle, ul#serviceNav li a {
+	line-height: 50px;
+	padding: 0 20px;
+}
+
+ul#serviceNav {
+	display: inline-block;
+	list-style-type: none;
+}
+
+ul#serviceNav li {
+	float: left;
+}
+
+ul#serviceNav li.activePage {
+	font-weight: bold;
+}
+
+ul#serviceNav li a {
+	border-left: 1px solid gray;
+	display: block;
+}
+
+ul#serviceNav li a:hover {
+	background-color: white;
+}
+
+section#content {
+	padding: 10px;
+}
+
+/* Page view */
+
+#pageContainer {
+	text-align: center;
+}
+
+#pageContainer > * {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+article.page {
+	position: relative;
+	border: 10px solid white;
+	background-color: white;
+	-moz-box-shadow:0 0 5px #888888;
+  	-webkit-box-shadow:0 0 5px #888888;
+}
+
+/* CSS-only triangles */
+
+.arrow {
+	border-style: solid;
+	border-color: transparent #ccc transparent;
+	height: 0;
+	width: 0;
+	margin: 10px;
+}
+
+.arrow.right {
+	border-width: 25px 0 25px 50px;
+}
+
+.arrow.left {
+	border-width: 25px 50px 25px 0;
+}
+
+.arrow:hover {
+	border-color: transparent #ddd transparent;
+}
