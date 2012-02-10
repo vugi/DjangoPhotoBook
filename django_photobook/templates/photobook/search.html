@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}The flickr picture search{% endblock %}
+
+{% block body %}
+      <h1>Search for pictures from the flickr</h1>
+      <h2>"This product uses the Flickr API but is not endorsed or certified by Flickr."</h2>
+      <form action="/search/results/" method="post">
+      {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Search" />
+      </label>
+{% endblock %}

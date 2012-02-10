@@ -27,5 +27,8 @@ urlpatterns = patterns('',
     url(r'^user/$', login_required(ListView.as_view(model = User, template_name = 'photobook/user_list.html')), name='user_list_view'),
     #user detail view
     url(r'^users/(?P<user_name>\S+)/$', user_view, name="user_view"),
-	
+    #Flickr search page
+    url(r'^search/$', search, name="search"),
+	#flickr search result page
+    url(r'^search/results/$', search_result, name="search_result"),
 )
