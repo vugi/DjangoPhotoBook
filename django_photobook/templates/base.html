@@ -13,6 +13,7 @@
 <title>PhotoBook</title>
 </head>
 <body>
+<<<<<<< HEAD
 	<header>
 		<a id="serviceTitle" href="{% url photobook:index %}">PhotoBook</a>
 		<ul id="serviceNav">
@@ -21,7 +22,8 @@
 				{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}
 				{% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">User albums</a></li>{% endblock %}
 				{% block nav_logout %}<li id="menuLogout"><a href="{% url photobook:logout %}">Logout</a></li>{% endblock %}
-				{% block nav_register %}<li id="menuRegister"><a href="{% url photobook:register %}">Register</a></li>{% endblock %}   					
+				{% block nav_register %}<li id="menuRegister"><a href="{% url photobook:register %}">Register</a></li>{% endblock %}
+                {% block nav_search %}<li id="menuSearch"><a href="{% url photobook:search %}">Search pictures through Flickr</a></li>{% endblock %}
 			{% endblock %}
 		</ul>
 	</header>

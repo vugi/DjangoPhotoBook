@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<!-- Header -->
+{% endblock %}
+ 
+{% block body %}
+
+{% for url in photo_urls %}
+    <div>
+    	<img src={{url}} alt="Should be working"/> 
+    </div>
+{% empty %}
+    No photos matching the tag found.
+{% endfor %}
+
+{% endblock %}

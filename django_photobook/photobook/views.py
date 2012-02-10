@@ -7,10 +7,12 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
+
 from django.core import serializers
 from django.core.exceptions import ValidationError
-
 import json
+
+import flickrapi
 
 # Photobook project imports
 from photobook.models import *
@@ -73,6 +75,7 @@ def user_view(request, user_name):
     userName = request.user.username
     return render_to_response('photobook/user_detail.html', {'user' : request.user, 'str' : str, 'owner' : user_name }, context_instance=RequestContext(request))
 
+
 def json_get_page(request, album_id, page_id):
     album_pages = Page.objects.filter(album__id=album_id)
     page = album_pages.filter(number=page_id) 
@@ -96,3 +99,44 @@ def json_save_page(request):
     return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
 
     
+    
+def search_result(request):
+    if request.method == 'POST':
+        api_key = 'baeae16ada7e043585db45da91af1601'
+        url_base = 'http://farm1.staticflickr.com/'
+        flickr = flickrapi.FlickrAPI(api_key)
+        photo_urls = []
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            free_text = form.cleaned_data['free_text']
+            tags = form.cleaned_data['tags']
+            tag_m = form.cleaned_data['tag_mode']
+            i = 0
+            for p in flickr.walk(tag_mode=tag_m,
+                tags=tags,
+                text=free_text,
+                min_taken_date='2008-08-20',
+                max_taken_date='2008-08-21',
+                per_page='500'):
+                i = i + 1
+                if (i > 20):
+                    break
+                current_url = url_base + p.get('server') + '/' + p.get('id') + '_' + p.get('secret') + '_m.jpg'
+                photo_urls.append(current_url)
+            return render_to_response('photobook/search_result.html', { 'photo_urls' : photo_urls }, context_instance=RequestContext(request))
+        else:
+            print 'Form was not valid'
+            return HttpResponseRedirect("/album/")
+    else:
+        return HttpResponseRedirect("/search/")
+    
+class SearchForm(forms.Form):
+    free_text = forms.CharField(required=False)
+    tags = forms.CharField(required=False)
+    tag_mode = forms.ChoiceField(choices=(('all', 'all',), ('any', 'any',)))
+    
+def search(request):
+    if request.method == 'GET':
+        form = SearchForm()
+        return render_to_response('photobook/search.html', { 'form' : form }, context_instance=RequestContext(request))
+
