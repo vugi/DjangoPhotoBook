@@ -28,9 +28,9 @@ urlpatterns = patterns('',
     #user detail view
     url(r'^users/(?P<user_name>\S+)/$', user_view, name="user_view"),
     #json get page information
-    url(r'^json_get_page/(?P<album_id>\d+)/(?P<page_id>\d+)', json_get_page, name='json_get_page'),
+    url(r'^album/(?P<album_id>\d+)/(?P<page_number>\d+)/json/$', get_page, name='get_page'),
 	#json add new page
-    url(r'^json_save_page/$', json_save_page, name='json_save_page'),
+    url(r'^add/positions/$', add_positions, name='add_positions'),
     #Flickr search page
     url(r'^search/$', search, name="search"),
 	#flickr search result page
