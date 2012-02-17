@@ -11,6 +11,27 @@ class Font(models.Model):
     
     def __unicode__(self):
         return self.family
+    
+class Caption(models.Model):
+    '''Caption on a page'''
+    content = models.TextField()
+    font = models.ForeignKey(Font)
+    #position = models.ForeignKey(Position)
+    
+    def __unicode__(self):
+        return self.content
+    
+class Image(models.Model):
+    '''Image on a page'''
+    url = models.CharField(max_length=1024)
+    #position = models.ForeignKey(Position)
+    
+    def __unicode__(self):
+        return self.url
+
+    #def natural_key(self):
+    #    return (self.url, self.position.natural_key())
+    #natural_key.dependencies = ['photobook.position']
 
 class Position(models.Model):
     '''Position of a layout element'''
@@ -19,34 +40,15 @@ class Position(models.Model):
     z = models.IntegerField(default=0) 
     h = models.PositiveIntegerField() 
     w = models.PositiveIntegerField() 
+    image = models.ForeignKey(Image, blank=True, null=True)
+    caption = models.ForeignKey(Caption, blank=True, null=True)
     
     def __unicode__(self):
         return '%s, %s, %s, %s, %s' % (self.x, self.y, self.z, self.h, self.w)
     
-    def natural_key(self):
-        return (self.x, self.y, self.z, self.h, self.w)
+    #def natural_key(self):
+    #    return (self.x, self.y, self.z, self.h, self.w)
     
-    
-class Caption(models.Model):
-    '''Caption on a page'''
-    content = models.TextField()
-    font = models.ForeignKey(Font)
-    position = models.ForeignKey(Position)
-    
-    def __unicode__(self):
-        return self.content
-    
-class Image(models.Model):
-    '''Image on a page'''
-    url = models.CharField(max_length=1024)
-    position = models.ForeignKey(Position)
-    
-    def __unicode__(self):
-        return self.url
-
-    def natural_key(self):
-        return (self.url, self.position.natural_key())
-    natural_key.dependencies = ['photobook.position']
         
 class Layout(models.Model):
     '''Layout of a page'''
@@ -79,8 +81,9 @@ class Page(models.Model):
         
     album = models.ForeignKey(Album) 
     #layout = models.ForeignKey(Layout)
-    images = models.ManyToManyField(Image, blank=True, null=True) #vai mielummin foreign key?
-    captions = models.ManyToManyField(Caption, blank=True, null=True)
+    #images = models.ManyToManyField(Image, blank=True, null=True)
+    #captions = models.ManyToManyField(Caption, blank=True, null=True)
+    positions = models.ManyToManyField(Position, blank=True, null=True)
     number = models.PositiveIntegerField()
     
     def __unicode__(self):

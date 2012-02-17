@@ -18,30 +18,32 @@
 <a href="#" class="arrow left"></a>
 
 <article class="page" style="height: 400px; width: 600px;">
-	{% if page.images %}
-		{% for image in page.images.all %}
+	{% if page.positions %}
+		{% for position in page.positions.all %}
+		    {% if position.image %}
 		    <div>
-		    	<img src="{{ image.url }}" style="
+		    	<img src="{{ position.image.url }}" style="
 		    		position:absolute; 
-					left: {{ image.position.x }}px; 
-					top: {{ image.position.y }}px;
-					height: {{ image.position.h }}px;
-					width: {{ image.position.w }}px;"/>
+					left: {{ position.x }}px; 
+					top: {{ position.y }}px;
+					height: {{ position.h }}px;
+					width: {{ position.w }}px;"/>
 		    </div>
-		{% endfor %}    
+		    {% endif %}	
+		    {% if position.caption %}
+		    <div>
+		    	<div style="position:absolute; 
+					left: {{ position.caption.x }}px; 
+					top: {{ position.caption.y }}px;">
+	    				{{ position.caption.content }}
+	    		</div>
+		    </div>
+		    {% endif %}		    
+		{% endfor %}		    
 	{% else %}
-	    No images added.
+	    No images or captions added.
 	{% endif %}
 	
-	{% for caption in page.captions.all %}
-	    <div style="position:absolute; 
-					left: {{ caption.position.x }}px; 
-					top: {{ caption.position.y }}px;">
-	    	{{ caption.content }}
-	    </div>
-	{% empty %}
-	    <div> No captions added.</div>
-	{% endfor %}
 </article>
 
 <a href="#" class="arrow right"></a>
