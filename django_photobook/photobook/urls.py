@@ -5,6 +5,10 @@ from django.contrib.auth.decorators import login_required
 from models import *
 from views import *
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+)
+
 urlpatterns = patterns('',
     url(r'^$', Index.as_view(), name='index'),
     #albums list
@@ -35,4 +39,8 @@ urlpatterns = patterns('',
     url(r'^search/$', search, name="search"),
 	#flickr search result page
     url(r'^search/results/$', search_result, name="search_result"),
+    #delete album
+    url(r'^album/(?P<album_id>\d+)/delete/$', delete_album, name="delete_album"),
+    #delete page
+    url(r'^album/(?P<album>\d+)/(?P<page_number>\d+)/delete/$', delete_page, name='delete_page'),
 )
