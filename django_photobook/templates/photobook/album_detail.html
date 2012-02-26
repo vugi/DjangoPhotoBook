@@ -48,11 +48,21 @@ $(document).ajaxSend(function(event, xhr, settings) {
 
 //json add positions test
 $(function() {
-	 $("#json_test").click(function () {
+	$("#page_test").click(function () {
+		$.ajax({
+		   	url: '/album/1/67/json/',
+		    type: 'POST',
+		    contentType: 'application/json; charset=utf-8',
+		    success: function(result) {
+		        alert("page added");
+		    }
+		});
+	});
+	 $("#position_test").click(function () {
 		 var page = 
 {
-        "album": 1,
-        "number": 9,
+        "album_id": 1,
+        "page_number": 67,
         "positions": [
 	    	{
 	       		"image": "http://www.konalaejapanesespitz.com/8W-9.JPG",
@@ -120,6 +130,7 @@ $(function() {
     No pages added.
 {% endfor %}
 
-<button id="json_test"> Json test</button>
+<button id="position_test"> position test</button>
+<button id="page_test"> page test</button>
 
 {% endblock %}

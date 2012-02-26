@@ -77,8 +77,8 @@ def user_view(request, user_name):
     return render_to_response('photobook/user_detail.html', {'user' : request.user, 'str' : str, 'owner' : user_name }, context_instance=RequestContext(request))
 
 
-def get_page(request, album_id, page_number):
-    #save a new page
+def get_or_save_page(request, album_id, page_number):
+    #save a new page with no positions
     if request.method == 'POST':
         try: 
             album = Album.objects.get(id=album_id)
@@ -94,19 +94,78 @@ def get_page(request, album_id, page_number):
             return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
         page.save()
         return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
+        
     #else get page
-    album_pages = Page.objects.filter(album__id=album_id)
-    page = album_pages.filter(number=page_number) 
+    '''serialized object
+    page = Page.objects.get(number=page_number, album__id=album_id)
     data = serializers.serialize('json', page, use_natural_keys=True)
-    return HttpResponse(data, content_type='application/json')
-
+    return HttpResponse(data, content_type='application/json')'''
+    
+    ''' returns 
+    {"page": {
+        "positions": [
+            {
+                "caption": null,
+                "w": 102,
+                "h": 101,
+                "y": 1,
+                "x": 2,
+                "image": "url",
+                "z": 1,
+                "id": 6
+            },
+            ...
+        ],
+        "page_number": "2",
+        "album_id": "1"
+    },
+    "success": true}
+    '''
+    try: 
+        album = Album.objects.get(id=album_id)
+    except Album.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
+    try: 
+        page = Page.objects.get(number=page_number, album__id=album_id)
+    except Page.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False, 'message': 'Page does not exist.'}), status=404, content_type='application/json')    
+    
+    positions = []
+    for p in page.positions.all():
+        image = None
+        if(p.image):
+            image = p.image.url
+        
+        caption = None
+        if(p.caption):
+            caption = {
+                'content': p.caption.content,
+                'font': p.caption.font.id
+            }
+        p = {
+             'id': p.id,
+             'image': image,
+             'caption': caption,
+             'x': p.x,
+             'y': p.y,
+             'z': p.z,
+             'h': p.h,
+             'w': p.w
+        }
+        positions.append(p)
+    page_information = {
+        'album_id': album_id, 
+        'page_number': page_number,
+        'positions': positions
+    }
+    return HttpResponse(json.dumps({'success': True, 'page': page_information}), content_type='application/json')
 
 def add_positions(request):
     '''Adds positions with images and caption to an existing page. 
     Expects json in following format:
     {
-        "album": 1,
-        "number": 4,
+        "album_id": 1,
+        "page_number": 4,
         "positions": [
             {
                "image": "url",
@@ -136,16 +195,14 @@ def add_positions(request):
             #check that the album exists
             album = None
             try: 
-                album = Album.objects.get(id=data['album'])
+                album = Album.objects.get(id=data['album_id'])
             except Album.DoesNotExist:
                 return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
             
             #check that the page exists
             page = None
-            #album_pages = Page.objects.filter(album=album)
-            #page = album_pages.filter(number=data['number']) 
             try: 
-                page = Page.objects.get(number=data['number'], album__id=data['album'])
+                page = Page.objects.get(number=data['page_number'], album__id=data['album_id'])
             except Page.DoesNotExist:
                 return HttpResponse(json.dumps({'success': False, 'message': 'Page does not exist.'}), status=404, content_type='application/json')    
             
