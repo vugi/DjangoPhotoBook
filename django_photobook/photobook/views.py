@@ -141,11 +141,14 @@ def get_or_save_page(request, album_id, page_number):
     for p in page.positions.all():
         image = None
         if(p.image):
-            image = p.image.url
-        
+            image = {
+                'id' : p.image.id,
+                'url': p.image.url
+        }
         caption = None
         if(p.caption):
             caption = {
+                'id' : p.caption.id,
                 'content': p.caption.content,
                 'font': p.caption.font.id
             }
