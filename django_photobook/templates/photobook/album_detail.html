@@ -104,6 +104,13 @@ $(function() {
 		    }
 		});
 	});
+    $("#delete_button").click(function () {
+        var r=confirm("Are you sure you wish to delete the album?");
+        if (r==true)
+        {
+           window.location.replace("./delete");
+        }
+    });
 });
 </script>
 
@@ -132,5 +139,7 @@ $(function() {
 
 <button id="position_test"> position test</button>
 <button id="page_test"> page test</button>
+
+{% if is_owner %} <button id="delete_button"> Delete Album</button>  {% endif %}
 
 {% endblock %}

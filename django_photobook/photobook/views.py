@@ -36,13 +36,20 @@ class AlbumDetailView(DetailView):
         context = super(AlbumDetailView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the pages of the album
         context['page_list'] = Page.objects.filter(album=self.object.id)
+        # Check to see if user is owner of the album
+        is_owner = False
+        album_owner = Album.objects.get(id=self.object.id).user
+        if (self.request.user.is_authenticated() and self.request.user.id == album_owner.id):
+            is_owner = True
+        context['is_owner'] = is_owner
         return context
 
 '''Single page view, change to return JSON'''
 def page_detail(request, album, page_number):
     album_pages = Page.objects.filter(album__id=album)
-    page = album_pages.get(number=page_number)    
-    return render_to_response('photobook/page_detail.html', {'page': page}, context_instance=RequestContext(request))
+    page = album_pages.get(number=page_number)
+    is_owner = Album.objects.get(id=album).user.id == request.user.id
+    return render_to_response('photobook/page_detail.html', {'page': page, "is_owner": is_owner}, context_instance=RequestContext(request))
 #List view for users
 class UserListView(ListView):
     model = User
@@ -291,4 +298,31 @@ def search(request):
     if request.method == 'GET':
         form = SearchForm()
         return render_to_response('photobook/search.html', { 'form' : form }, context_instance=RequestContext(request))
+        
+def delete_album(request, album_id):
+    logged_user = request.user
+    album_owner = Album.objects.get(id=album_id).user
+    if (logged_user.id == album_owner.id):
+        album = Album.objects.get(id=album_id)
+        album.delete()
+        return HttpResponseRedirect("/album/")
+    else:
+        return HttpResponseRedirect("/")
 
+def delete_page(request, album, page_number):
+    logged_user = request.user
+    album_pages = Page.objects.filter(album__id=album)
+    current_page = album_pages.get(number=page_number)
+    current_album = Album.objects.get(id=album)
+    album_owner = current_album.user
+    if (logged_user.id == album_owner.id):
+        page_number = current_page.number
+        current_page.delete()
+        all_pages = current_album.page_set.all()
+        for p in all_pages:
+            if (p.number > page_number):
+                p.number = p.number - 1
+                p.save()
+        return HttpResponseRedirect("/album/"+str(current_album.id)+"/")
+    else:
+        return HttpResponseRedirect("/")
