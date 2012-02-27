@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     #edit album
  #   url(r'^album/(?P<pk>\d+)/edit/$', UpdateView.as_view(model=Album, template_name='photobook/album_edit.html'), name='edit_book_view'),
     #new album
- #   url(r'^album/create/$', create_album, name='create_album_view'),
+    url(r'^album/create/$', create_album, name='create_album_view'),
 	#login view
 	url(r'^login/$', 'django.contrib.auth.views.login'),
 	#logout view

@@ -329,3 +329,34 @@ def delete_page(request, album, page_number):
         return HttpResponseRedirect("/album/"+str(current_album.id)+"/")
     else:
         return HttpResponseRedirect("/")
+
+class modelCreationForm(forms.Form):
+    album_name = forms.CharField(min_length=3)
+    album_height = forms.IntegerField(min_value=1)
+    album_width = forms.IntegerField(min_value=1)
+
+@login_required    
+def create_album(request):
+    if request.method == 'POST':
+        form = modelCreationForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['album_name']
+            height = form.cleaned_data['album_height']
+            width = form.cleaned_data['album_width']
+            new_album = Album(user = request.user, name = name, height = height, width = width)
+            try:
+                new_album.full_clean()
+                new_album.save()
+                return HttpResponseRedirect("/users/" + request.user.username + "/")
+            except ValidationError, e:
+                print "Failed to validate the model object."
+                return HttpResponseRedirect("/")
+        else:
+            return render_to_response("photobook/create_album.html", {
+                'form' : form
+            }, context_instance=RequestContext(request))
+    else:
+        form = modelCreationForm()
+        return render_to_response("photobook/create_album.html", {
+                'form' : form
+            }, context_instance=RequestContext(request))

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
 
@@ -63,7 +64,7 @@ class Album(models.Model):
         ordering = ['-pub_date']
     user = models.ForeignKey(User)
     name = models.CharField(max_length=255)
-    pub_date = models.DateField()
+    pub_date = models.DateField(default=datetime.now)
     height = models.PositiveIntegerField() #px or cm?
     width = models.PositiveIntegerField() #px or cm?
     
