@@ -3,54 +3,75 @@
 {% block header %}
 <!-- Header -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}js/ajax_csrf.js"></script>
+
 <script type="text/javascript">
-
-/* Adding this to a javascript file that is included on your site will 
- * ensure that AJAX POST requests that are made via jQuery will not be caught by the CSRF protection.*/
-
-$(document).ajaxSend(function(event, xhr, settings) {
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    function sameOrigin(url) {
-        // url could be relative or scheme relative or absolute
-        var host = document.location.host; // host + port
-        var protocol = document.location.protocol;
-        var sr_origin = '//' + host;
-        var origin = protocol + sr_origin;
-        // Allow absolute or scheme relative URLs to same origin
-        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-            // or any other URL that isn't scheme relative or absolute i.e relative.
-            !(/^(\/\/|http:|https:).*/.test(url));
-    }
-    function safeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    }
-});
-
-
-//json add positions test
 $(function() {
+	
+	function loadPage(page){
+		console.log("Loading page"+page);
+		
+		$("#loader").show();
+		$("#page").empty();
+		
+		$.getJSON(page+"/json", function(data,status){
+			console.log(data,status);
+			
+			if(data && data.page && data.page.positions){
+				for(var i=0; i<data.page.positions.length; i++){
+					var position = data.page.positions[i];
+					//console.log(position);
+					
+					if(position.image){
+						$("<img />")
+							.attr("src",position.image.url)
+							.css({
+								"position":"absolute", 
+								"left": position.x+"px",
+								"top": position.y+"px",
+								"height": position.h+"px",
+								"width": position.w+"px"
+								})
+							.appendTo("#page");
+					} else if (position.caption) {
+						$("<div>"+position.caption.content+"</div>")
+							.css({
+								"position":"absolute", 
+								"left": position.x+"px",
+								"top": position.y+"px",
+								"height": position.h+"px",
+								"width": position.w+"px"
+								})
+							.appendTo("#page");
+					}
+				}		
+			}
+			
+			$("#loader").hide();
+		});
+	}
+	
+	var page = 1;
+	loadPage(page);
+	
+	$("#next").click(function(){
+		console.log("Next page");
+		page++;
+		loadPage(page);
+	});
+	
+	$("#previous").click(function(){
+		console.log("Previous page");
+		page--;
+		loadPage(page);
+	});
+	
+	/* Old stuff below */
+
+	//json add positions test
 	$("#page_test").click(function () {
 		$.ajax({
-		   	url: '/album/1/67/json/',
+		   	url: '/album/1/2/json/',
 		    type: 'POST',
 		    contentType: 'application/json; charset=utf-8',
 		    success: function(result) {
@@ -60,9 +81,9 @@ $(function() {
 	});
 	 $("#position_test").click(function () {
 		 var page = 
-{
+		{
         "album_id": 1,
-        "page_number": 67,
+        "page_number": 2,
         "positions": [
 	    	{
 	       		"image": "http://www.konalaejapanesespitz.com/8W-9.JPG",
@@ -92,7 +113,7 @@ $(function() {
 	       		"w": "102"
 	    	}
 	    ],
-};
+		};
 		$.ajax({
 		   	url: '{% url photobook:add_positions %}',
 		    type: 'POST',
@@ -104,13 +125,7 @@ $(function() {
 		    }
 		});
 	});
-    $("#delete_button").click(function () {
-        var r=confirm("Are you sure you wish to delete the album?");
-        if (r==true)
-        {
-           window.location.replace("./delete");
-        }
-    });
+
 });
 </script>
 
@@ -129,8 +144,24 @@ $(function() {
 <h1>{{ album.name }}</h1>
 </div>
 
+<div id="pageContainer">
 
+<a href="#" id="previous" class="arrow left"></a>
 
+<div id="pages" style="position: relative;">
+	<article id="page" class="page" style="height: {{ album.height }}px; width: {{ album.width }}px;"></article>
+	<div id='loader'>
+		<div id='circle_1' class='circle'></div>
+		<div id='circle_2' class='circle'></div>
+		<div id='circle_3' class='circle'></div>
+	</div>
+</div>
+
+<a href="#" id="next" class="arrow right"></a>
+
+</div>
+
+<!--
 {% for page in page_list %}
     <div>
     	<a href="{{ page.get_absolute_url }}"> {{ page.number }} </a>
@@ -141,5 +172,5 @@ $(function() {
 
 <button id="position_test"> position test</button>
 <button id="page_test"> page test</button>
-
+-->
 {% endblock %}
