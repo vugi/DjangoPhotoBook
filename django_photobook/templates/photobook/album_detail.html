@@ -52,78 +52,23 @@ $(function() {
 	}
 	
 	var page = 1;
+	var pages = {{ page_list|length }};
 	loadPage(page);
 	
 	$("#next").click(function(){
 		console.log("Next page");
-		page++;
-		loadPage(page);
+		if(page+1<=pages){
+			page++;
+			loadPage(page);
+		}
 	});
 	
 	$("#previous").click(function(){
 		console.log("Previous page");
-		page--;
-		loadPage(page);
-	});
-	
-	/* Old stuff below */
-
-	//json add positions test
-	$("#page_test").click(function () {
-		$.ajax({
-		   	url: '/album/1/2/json/',
-		    type: 'POST',
-		    contentType: 'application/json; charset=utf-8',
-		    success: function(result) {
-		        alert("page added");
-		    }
-		});
-	});
-	 $("#position_test").click(function () {
-		 var page = 
-		{
-        "album_id": 1,
-        "page_number": 2,
-        "positions": [
-	    	{
-	       		"image": "http://www.konalaejapanesespitz.com/8W-9.JPG",
-	       		"x": "32",
-	       		"y": "31",
-	       		"z": "1",
-	       		"h": "101",
-	       		"w": "102"
-	       	},
-	    	{
-	       		"image": "http://images04.olx.ae/ui/11/82/73/1300864362_180207973_1-Pictures-of--japanese-spitz-puppy-for-sale.jpg",
-	       		"x": "120",
-	       		"y": "120",
-	       		"z": "1",
-	       		"h": "200",
-	       		"w": "202"
-	       	},
-	    	{
-	       		"caption": {
-	       			"content": "Cute puppies <3",
-	       			"font": 1 /* font_id */ 
-	       		},
-	       		"x": "2",
-	       		"y": "200",
-	       		"z": "1",
-	       		"h": "101",
-	       		"w": "102"
-	    	}
-	    ],
-		};
-		$.ajax({
-		   	url: '{% url photobook:add_positions %}',
-		    type: 'POST',
-		    contentType: 'application/json; charset=utf-8',
-		    data: JSON.stringify(page),
-		    dataType: 'text',
-		    success: function(result) {
-		        alert("positions added");
-		    }
-		});
+		if(page-1>0){
+			page--;
+			loadPage(page);
+		}
 	});
 
 });
@@ -137,8 +82,8 @@ $(function() {
 <div class="page-header">
 {% if is_owner %} 
 <div class="pull-right">
-<a href="#" class="btn btn-primary">Edit Album</a>
-<a href="delete" class="btn btn-danger">Delete Album</a>
+<a href="edit" class="btn btn-primary"><i class="icon-edit icon-white"></i> Edit Album</a>
+<a href="delete" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Album</a>
 </div>
 {% endif %}
 <h1>{{ album.name }}</h1>
@@ -169,8 +114,5 @@ $(function() {
 {% empty %}
     No pages added.
 {% endfor %}
-
-<button id="position_test"> position test</button>
-<button id="page_test"> page test</button>
 -->
 {% endblock %}

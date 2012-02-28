@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<!-- Header -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}js/ajax_csrf.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	
+	function loadPage(page){
+		console.log("Loading page"+page);
+		
+		$("#loader").show();
+		$("#page").empty();
+		
+		$.getJSON("../"+page+"/json", function(data,status){
+			console.log(data,status);
+			
+			if(data && data.page && data.page.positions){
+				for(var i=0; i<data.page.positions.length; i++){
+					var position = data.page.positions[i];
+					//console.log(position);
+					
+					if(position.image){
+						$("<img />")
+							.attr("src",position.image.url)
+							.css({
+								"position":"absolute", 
+								"left": position.x+"px",
+								"top": position.y+"px",
+								"height": position.h+"px",
+								"width": position.w+"px"
+								})
+							.appendTo("#page");
+					} else if (position.caption) {
+						$("<div>"+position.caption.content+"</div>")
+							.css({
+								"position":"absolute", 
+								"left": position.x+"px",
+								"top": position.y+"px",
+								"height": position.h+"px",
+								"width": position.w+"px"
+								})
+							.appendTo("#page");
+					}
+				}		
+			}
+			
+			$("#loader").hide();
+		});
+	}
+	
+	var page = 1;
+	loadPage(page);
+	
+	$("#next").click(function(){
+		console.log("Next page");
+		page++;
+		loadPage(page);
+	});
+	
+	$("#previous").click(function(){
+		console.log("Previous page");
+		page--;
+		loadPage(page);
+	});
+	
+	/* Old stuff below */
+
+	//json add positions test
+	$("#page_test").click(function () {
+		$.ajax({
+		   	url: '/album/1/2/json/',
+		    type: 'POST',
+		    contentType: 'application/json; charset=utf-8',
+		    success: function(result) {
+		        alert("page added");
+		    }
+		});
+	});
+	 $("#position_test").click(function () {
+		 var page = 
+		{
+        "album_id": 1,
+        "page_number": 2,
+        "positions": [
+	    	{
+	       		"image": "http://www.konalaejapanesespitz.com/8W-9.JPG",
+	       		"x": "32",
+	       		"y": "31",
+	       		"z": "1",
+	       		"h": "101",
+	       		"w": "102"
+	       	},
+	    	{
+	       		"image": "http://images04.olx.ae/ui/11/82/73/1300864362_180207973_1-Pictures-of--japanese-spitz-puppy-for-sale.jpg",
+	       		"x": "120",
+	       		"y": "120",
+	       		"z": "1",
+	       		"h": "200",
+	       		"w": "202"
+	       	},
+	    	{
+	       		"caption": {
+	       			"content": "Cute puppies <3",
+	       			"font": 1 /* font_id */ 
+	       		},
+	       		"x": "2",
+	       		"y": "200",
+	       		"z": "1",
+	       		"h": "101",
+	       		"w": "102"
+	    	}
+	    ],
+		};
+		$.ajax({
+		   	url: '{% url photobook:add_positions %}',
+		    type: 'POST',
+		    contentType: 'application/json; charset=utf-8',
+		    data: JSON.stringify(page),
+		    dataType: 'text',
+		    success: function(result) {
+		        alert("positions added");
+		    }
+		});
+	});
+
+});
+</script>
+
+
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+{% if is_owner %} 
+<div class="pull-right">
+<a href="#" class="btn btn-primary">Edit Album</a>
+<a href="delete" class="btn btn-danger">Delete Album</a>
+</div>
+{% endif %}
+<h1><span class="label label-important" style="vertical-align: 0.5em;">Edit</span> {{ album.name }}</h1>
+</div>
+
+<div id="pageContainer">
+
+<a href="#" id="previous" class="arrow left"></a>
+
+<div id="pages" style="position: relative;">
+	<article id="page" class="page" style="height: {{ album.height }}px; width: {{ album.width }}px;"></article>
+	<div id='loader'>
+		<div id='circle_1' class='circle'></div>
+		<div id='circle_2' class='circle'></div>
+		<div id='circle_3' class='circle'></div>
+	</div>
+</div>
+
+<a href="#" id="next" class="arrow right"></a>
+
+</div>
+
+
+<button id="position_test"> position test</button>
+<button id="page_test"> page test</button>
+
+{% endblock %}

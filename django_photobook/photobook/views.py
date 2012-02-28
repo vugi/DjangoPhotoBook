@@ -21,11 +21,12 @@ from photobook.models import *
 class Index(TemplateView):
     template_name = 'photobook/index.html'
 	
-# Detail view for Albums
+# List view for Albums
 class AlbumListView(ListView):
     model = Album
     template_name = 'photobook/album_list.html'
     context_object_name = "album_list"
+ 
     
 # Detail view for Albums
 class AlbumDetailView(DetailView):
