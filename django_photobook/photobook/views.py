@@ -120,7 +120,7 @@ def get_or_save_page(request, album_id, page_number):
                 "x": 2,
                 "image": "url",
                 "z": 1,
-                "id": 6
+                "id": "css style id"
             },
             ...
         ],
@@ -151,7 +151,7 @@ def get_or_save_page(request, album_id, page_number):
             caption = {
                 'id' : p.caption.id,
                 'content': p.caption.content,
-                'font': p.caption.font.id
+                'font': p.caption.font
             }
         p = {
              'id': p.id,
@@ -188,8 +188,8 @@ def add_positions(request):
             },
             {
                "caption": {
-                   "content": "string",
-                   "font": 1 /* font_id */ 
+                   "content": string,
+                   "font": string /* css style id */ 
                },
                "x": "2",
                "y": "200",
@@ -231,11 +231,7 @@ def add_positions(request):
                     image.save()
                 #save caption            
                 if('caption' in p):
-                    try: 
-                        font = Font.objects.get(id=p['caption']['font'])
-                    except Font.DoesNotExist:
-                        return HttpResponse(json.dumps({'success': False, 'message': 'Font does not exist.'}), status=404, content_type='application/json')    
-                    caption = Caption(content = p['caption']['content'], font = font)              
+                    caption = Caption(content = p['caption']['content'], font = p['caption']['font'])              
                     try:
                         caption.full_clean()
                     except ValidationError, e:

@@ -4,19 +4,21 @@ from datetime import datetime
 
 # Create your models here.
 
-class Font(models.Model):
-    '''Font used for caption'''
-    size = models.PositiveIntegerField()  
-    family = models.CharField(max_length=255)
-    color = models.CharField(max_length=7) #Hex Color, e.g. "#FF0000"
+
+#class Font(models.Model):
+#    '''Font used for caption'''
+#    size = models.PositiveIntegerField()  
+#    family = models.CharField(max_length=255)
+#    color = models.CharField(max_length=7) #Hex Color, e.g. "#FF0000"
     
-    def __unicode__(self):
-        return self.family
+#    def __unicode__(self):
+#        return self.family
     
 class Caption(models.Model):
     '''Caption on a page'''
     content = models.TextField()
-    font = models.ForeignKey(Font)
+    font = models.CharField(max_length=255)
+    #font = models.ForeignKey(Font)
     #position = models.ForeignKey(Position)
     
     def __unicode__(self):
