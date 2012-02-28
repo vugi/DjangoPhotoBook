@@ -1,3 +1,8 @@
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+
 /* Page view */
 
 #pageContainer {
@@ -21,10 +26,14 @@ article.page {
 
 .arrow {
 	border-style: solid;
-	border-color: transparent #ccc transparent;
+	border-color: transparent #bbb transparent;
 	height: 0;
 	width: 0;
 	margin: 10px;
+}
+
+.arrow.disabled, .arrow.disabled:hover {
+	border-color: transparent #eee transparent;
 }
 
 .arrow.right {

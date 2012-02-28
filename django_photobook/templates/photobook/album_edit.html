@@ -2,68 +2,20 @@
 
 {% block header %}
 <!-- Header -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 <script src="{{ STATIC_URL }}js/ajax_csrf.js"></script>
+<script src="{{ STATIC_URL }}js/common.js"></script>
 
 <script type="text/javascript">
+
+var album = {{ album.id }};
+var page = 1;
+var pages = 2; /*{{ page_list|length }}*/
+
 $(function() {
-	
-	function loadPage(page){
-		console.log("Loading page"+page);
-		
-		$("#loader").show();
-		$("#page").empty();
-		
-		$.getJSON("../"+page+"/json", function(data,status){
-			console.log(data,status);
-			
-			if(data && data.page && data.page.positions){
-				for(var i=0; i<data.page.positions.length; i++){
-					var position = data.page.positions[i];
-					//console.log(position);
-					
-					if(position.image){
-						$("<img />")
-							.attr("src",position.image.url)
-							.css({
-								"position":"absolute", 
-								"left": position.x+"px",
-								"top": position.y+"px",
-								"height": position.h+"px",
-								"width": position.w+"px"
-								})
-							.appendTo("#page");
-					} else if (position.caption) {
-						$("<div>"+position.caption.content+"</div>")
-							.css({
-								"position":"absolute", 
-								"left": position.x+"px",
-								"top": position.y+"px",
-								"height": position.h+"px",
-								"width": position.w+"px"
-								})
-							.appendTo("#page");
-					}
-				}		
-			}
-			
-			$("#loader").hide();
-		});
-	}
-	
-	var page = 1;
-	loadPage(page);
-	
-	$("#next").click(function(){
-		console.log("Next page");
-		page++;
-		loadPage(page);
-	});
-	
-	$("#previous").click(function(){
-		console.log("Previous page");
-		page--;
-		loadPage(page);
+	loadPage(album,page,function(){
+		$("#page img").draggable();
 	});
 	
 	/* Old stuff below */
