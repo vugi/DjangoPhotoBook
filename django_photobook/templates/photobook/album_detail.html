@@ -120,15 +120,16 @@ $(function() {
 {% block body %}
 
 <div class="page-header">
+{% if is_owner %} 
+<div class="pull-right">
+<a href="#" class="btn btn-primary">Edit Album</a>
+<a href="delete" class="btn btn-danger">Delete Album</a>
+</div>
+{% endif %}
 <h1>{{ album.name }}</h1>
 </div>
 
-<div>
-	Height: {{ album.height }}
-</div>
-<div>
-	Width: {{ album.width }}
-</div>
+
 
 {% for page in page_list %}
     <div>
@@ -140,7 +141,5 @@ $(function() {
 
 <button id="position_test"> position test</button>
 <button id="page_test"> page test</button>
-
-{% if is_owner %} <button id="delete_button"> Delete Album</button>  {% endif %}
 
 {% endblock %}
