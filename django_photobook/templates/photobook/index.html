@@ -4,11 +4,15 @@
 <!-- Header -->
 {% endblock %}
 
-{% block nav_index %}<li id="menuIndex" class="activePage"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}
+{% block nav_index %}<li id="menuIndex" class="active"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}
 
 
 {% block body %}
 
-Blub.
+<div class="hero-unit">
+<h1>Turn your life into a book</h1>
+<p>PhotoBook let's you easily make a virtual photo book of your favourite images. Search your favourite images from Flickr and make a personal collection. Try it today and turn your life into a gorgeous book!</p>
+<p><a href="register" class="btn btn-primary btn-large">Register</a> <a href="login/?next=/album/" class="btn btn-large">Login</a></p>
+</div>
 
 {% endblock %}

@@ -4,17 +4,30 @@
 <!-- Header -->
 {% endblock %}
 
-{% block nav_list %}<li id="menuList" class="activePage"><a href="{% url photobook:album_list_view %}">List albums</a></li>{% endblock %}
-
+{% block nav_list %}<li id="menuList" class="active"><a href="{% url photobook:album_list_view %}">Albums</a></li>{% endblock %}
  
 {% block body %}
 
+<div class="page-header">
+<a href="#" class="btn btn-primary pull-right">New album</a>
+<h1>Albums</h1>
+</div>
+
+<ul class="thumbnails">
 {% for album in album_list %}
-    <div>
-    	<a href="{{ album.get_absolute_url }}"> {{ album.name }} </a>
-    </div>
+<li class="span3">
+<a href="{{ album.get_absolute_url }}" class="thumbnail"> 
+<img src="http://placehold.it/260x180" alt="">
+<div class="caption">
+  <h5>{{ album.name }} </h5> 
+</div>
+</a>       
+</li>
+          
 {% empty %}
     No albums published.
 {% endfor %}
 
 {% endblock %}
+
+</ul>

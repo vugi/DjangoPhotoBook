@@ -2,19 +2,24 @@
 
 {% block body %}
 
+<div class="page-header">
+<h1>Login</h1>
+</div>
+
   {% if form.errors %}
     <p class="error">Sorry, that's not a valid username or password</p>
   {% endif %}
 
-  <form action='.' method='post'>
+  <form action='.' method='post' class="">
   {% csrf_token %}
     <label for="username">User name:</label>
     <input type="text" name="username" value="" id="username">
     <label for="password">Password:</label>
     <input type="password" name="password" value="" id="password">
 
-    <input type="submit" value="login" />
+	<br/>
+    <input type="submit" value="Login" class="btn btn-primary" />
     <input type="hidden" name="next" value="{{ next }}" />
-  <form action='.' method='post'>
-
+  </form>
+  
 {% endblock %}

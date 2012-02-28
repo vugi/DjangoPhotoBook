@@ -3,7 +3,9 @@
 {% block title %}Create new Album{% endblock %}
 
 {% block body %}
+	<div class="page-header">
       <h1>Create a new album</h1>
+    </div>
       <form action="." method="post">
       {% csrf_token %}
         {{form.as_p}}

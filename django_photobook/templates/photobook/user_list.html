@@ -6,12 +6,23 @@
  
 {% block body %}
 
+<div class="page-header">
+<h1>Users</h1>
+</div>
+
+<ul class="thumbnails">
 {% for user in user_list %}
-    <div>
-    	<a href="{{ user.get_absolute_url }}"> {{ user.username }} </a>
-    </div>
+<li class="span2">
+<a href="{{ user.get_absolute_url }}" class="thumbnail"> 
+<img src="http://placehold.it/160x160" alt="">
+<div class="caption">
+  <h5>{{ user.username }}</h5> 
+</div>
+</a>       
+</li>
 {% empty %}
-    No users registered
+    <li>No users registered</li>
 {% endfor %}
+</ul>
 
 {% endblock %}
