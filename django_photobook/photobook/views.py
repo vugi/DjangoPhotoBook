@@ -59,7 +59,6 @@ class UserListView(ListView):
     
 # Register view
 def register(request):
-
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -86,30 +85,39 @@ def user_view(request, user_name):
 
 
 def get_or_save_page(request, album_id, page_number):
-    #save a new page with no positions
+    #if post, save the page and positions
     if request.method == 'POST':
+        #save a new page
+        album = None
         try: 
             album = Album.objects.get(id=album_id)
         except Album.DoesNotExist:
             return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
-        page = Page(
-            album = Album.objects.get(id=album_id), 
-            number = page_number
-        )
-        try:
-            page.full_clean()
-        except ValidationError, e:
-            return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
-        page.save()
-        return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
         
+        #if the page does exist, delete all position objects 
+        try: 
+            page = Page.objects.get(number=page_number, album__id=album_id)
+            page.positions.all().delete()
+        #else create a new page
+        except Page.DoesNotExist:
+            page = Page(
+                album = Album.objects.get(id=album_id), 
+                number = page_number
+            )
+            try:
+                page.full_clean()
+            except ValidationError, e:
+                return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
+            page.save()
+                    
+        #save all positions 
+        return add_positions(request, album, page)
+        #return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
+
+
     #else get page
-    '''serialized object
-    page = Page.objects.get(number=page_number, album__id=album_id)
-    data = serializers.serialize('json', page, use_natural_keys=True)
-    return HttpResponse(data, content_type='application/json')'''
     
-    ''' returns 
+    ''' returns a json in following format:
     {"page": {
         "positions": [
             {
@@ -171,7 +179,7 @@ def get_or_save_page(request, album_id, page_number):
     }
     return HttpResponse(json.dumps({'success': True, 'page': page_information}), content_type='application/json')
 
-def add_positions(request):
+def add_positions(request, album, page):
     '''Adds positions with images and caption to an existing page. 
     Expects json in following format:
     {
@@ -201,22 +209,12 @@ def add_positions(request):
     }
     '''
     if request.is_ajax():
-        if request.method == 'POST':
-            data = json.loads(request.raw_post_data)            
-            #check that the album exists
-            album = None
-            try: 
-                album = Album.objects.get(id=data['album_id'])
-            except Album.DoesNotExist:
+        if request.method == 'POST':                       
+            if(not album):
                 return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
-            
-            #check that the page exists
-            page = None
-            try: 
-                page = Page.objects.get(number=data['page_number'], album__id=data['album_id'])
-            except Page.DoesNotExist:
+            if(not page):
                 return HttpResponse(json.dumps({'success': False, 'message': 'Page does not exist.'}), status=404, content_type='application/json')    
-            
+            data = json.loads(request.raw_post_data)
             #save all positions
             for p in data['positions']:
                 image = None

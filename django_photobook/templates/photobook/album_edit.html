@@ -34,20 +34,20 @@ $(function() {
 	 $("#position_test").click(function () {
 		 var page = 
 		{
-        "album_id": 1,
-        "page_number": 1,
+        //"album_id": 1,
+        //"page_number": 1,
         "positions": [
 	    	{
-	       		"image": "http://www.konalaejapanesespitz.com/8W-9.JPG",
+	       		"image": "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcRjoMXVbAnuQ6_8_xkEcsJuVjRnnPIWb08IMEZjTebU63Ryy-Yr8g",
 	       		"x": "32",
 	       		"y": "31",
 	       		"z": "1",
-	       		"h": "101",
-	       		"w": "102"
+	       		"h": "201",
+	       		"w": "202"
 	       	},
 	    	{
 	       		"image": "http://images04.olx.ae/ui/11/82/73/1300864362_180207973_1-Pictures-of--japanese-spitz-puppy-for-sale.jpg",
-	       		"x": "120",
+	       		"x": "300",
 	       		"y": "120",
 	       		"z": "1",
 	       		"h": "200",
@@ -55,11 +55,11 @@ $(function() {
 	       	},
 	    	{
 	       		"caption": {
-	       			"content": "Cute puppies <3",
-	       			"font": 1 /* font_id */ 
+	       			"content": "Cute puppies ~<3",
+	       			"font": "basic" /* font_id */ 
 	       		},
 	       		"x": "2",
-	       		"y": "200",
+	       		"y": "300",
 	       		"z": "1",
 	       		"h": "101",
 	       		"w": "102"
@@ -67,7 +67,7 @@ $(function() {
 	    ],
 		};
 		$.ajax({
-		   	url: '{% url photobook:add_positions %}',
+		   	url: '/album/1/1/json/',
 		    type: 'POST',
 		    contentType: 'application/json; charset=utf-8',
 		    data: JSON.stringify(page),

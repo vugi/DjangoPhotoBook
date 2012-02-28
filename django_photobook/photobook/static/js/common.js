@@ -31,7 +31,7 @@ function loadPage(album,page,callback){
 	$("#loader").show();
 	$("#page").empty();
 	
-	$.getJSON("/album/"+album+"/"+page+"/json", function(data,status){
+	$.getJSON("/album/"+album+"/"+page+"/json/", function(data,status){
 		console.log(data,status);
 		
 		if(data && data.page && data.page.positions){
