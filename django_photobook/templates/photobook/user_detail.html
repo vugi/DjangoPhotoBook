@@ -4,18 +4,32 @@
 <!-- Header -->
 {% endblock %}
 
+{% block nav_user %}<li id="menuUser" class="active"><a href="{% url photobook:user_list_view %}">Users</a></li>{% endblock %}
+ 
 {% block body %}
 
+{% if is_owner %}
 <div class="page-header">
-<h1>{{owner}}</h1>
+<a href="create" class="btn btn-primary pull-right">New album</a>
+<h1>{{page_owner.username}}'s albums</h1>
 </div>
+{% endif %}
 
-<div>
-    Welcome to {{owner}}'s page, {{user.username}}!
+<ul class="thumbnails">
+{% for album in album_list %}
+<li class="span3">
+<a href="{{ album.get_absolute_url }}" class="thumbnail"> 
+<img src="http://placehold.it/260x180" alt="">
+<div class="caption">
+  <h5>{{ album.name }} <br> Created: {{album.pub_date}}</h5> 
 </div>
-<div>
-    {{str}}
-</div>
+</a>       
+</li>
+          
+{% empty %}
+    No albums published.
+{% endfor %}
 
 {% endblock %}
-    
+
+</ul>
