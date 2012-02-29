@@ -12,6 +12,7 @@ from django.core import serializers
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils import simplejson
 import json
+from forms import *
 
 import flickrapi
 
@@ -76,12 +77,12 @@ def register(request):
     }, context_instance=RequestContext(request))
     
 def user_view(request, user_name):
+    is_owner = False;
     if (request.user.is_authenticated() and request.user.username == user_name):
-        str = "You are looking at your own page"
-    else:
-        str = "You are looking at someone else's page"
-    userName = request.user.username
-    return render_to_response('photobook/user_detail.html', {'user' : request.user, 'str' : str, 'owner' : user_name }, context_instance=RequestContext(request))
+        is_owner = True
+    page_owner = User.objects.get(username=user_name)
+    album_list = Album.objects.filter(user=page_owner)
+    return render_to_response('photobook/user_detail.html', {'page_owner' : page_owner, 'album_list' : album_list, 'is_owner' : is_owner }, context_instance=RequestContext(request))
 
 
 def get_or_save_page(request, album_id, page_number):
@@ -287,11 +288,6 @@ def search_result(request):
     else:
         return HttpResponseRedirect("/search/")
     
-class SearchForm(forms.Form):
-    free_text = forms.CharField(required=False)
-    tags = forms.CharField(required=False)
-    tag_mode = forms.ChoiceField(choices=(('all', 'all',), ('any', 'any',)))
-    
 def search(request):
     if request.method == 'GET':
         form = SearchForm()
@@ -324,11 +320,6 @@ def delete_page(request, album, page_number):
         return HttpResponseRedirect("/album/"+str(current_album.id)+"/")
     else:
         return HttpResponseRedirect("/")
-
-class modelCreationForm(forms.Form):
-    album_name = forms.CharField(min_length=3)
-    album_height = forms.IntegerField(min_value=1)
-    album_width = forms.IntegerField(min_value=1)
 
 @login_required    
 def create_album(request):
