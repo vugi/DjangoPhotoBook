@@ -2,6 +2,9 @@
 
 {% block header %}
 <!-- Header -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}js/ajax_csrf.js"></script>
+<script src="{{ STATIC_URL }}js/common.js"></script>
 {% endblock %}
 
 {% block nav_index %}<li id="menuIndex" class="active"><a href="{% url photobook:index %}">Home</a></li>{% endblock %}
@@ -9,7 +12,7 @@
 {% block nav_loggedout_msg %}
 {% if messages %}
     {% for message in messages %}
-    <p class="navbar-text pull-right">{{ message }}</p>
+    <p id="logout" class="navbar-text pull-right">{{ message }}</p>
     {% endfor %}
 
 {% endif %}  

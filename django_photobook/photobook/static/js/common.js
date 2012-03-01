@@ -22,6 +22,10 @@ $(document).ready(function(){
 			console.log("No previous page");
 		}
 	});
+    
+    if ($("#logout").length) {
+        $("#logout").delay(1200).fadeOut(1000);
+    }
 });
 
 function loadPage(album,page,callback){
