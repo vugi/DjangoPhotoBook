@@ -12,6 +12,7 @@ from django.core import serializers
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils import simplejson
 import json
+
 from forms import *
 
 import flickrapi
@@ -46,7 +47,7 @@ class AlbumDetailView(DetailView):
         context['is_owner'] = is_owner
         return context
 
-'''Single page view, change to return JSON'''
+#Single page view
 def page_detail(request, album, page_number):
     album_pages = Page.objects.filter(album__id=album)
     page = album_pages.get(number=page_number)
@@ -88,12 +89,19 @@ def user_view(request, user_name):
 def get_or_save_page(request, album_id, page_number):
     #if post, save the page and positions
     if request.method == 'POST':
-        #save a new page
+        
+        #check that the album exists
         album = None
         try: 
             album = Album.objects.get(id=album_id)
         except Album.DoesNotExist:
             return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
+        
+        #check that the logged in user is authorized to make changes 
+        logged_user = request.user
+        album_owner = Album.objects.get(id=album_id).user
+        if (not logged_user.id == album_owner.id):
+            return HttpResponse(json.dumps({'success': False, 'message': 'Unauthorized access.'}), status=401, content_type='application/json')    
         
         #if the page does exist, delete all position objects 
         try: 
@@ -112,7 +120,8 @@ def get_or_save_page(request, album_id, page_number):
             page.save()
                     
         #save all positions 
-        return add_positions(request, album, page)
+        data = json.loads(request.raw_post_data)
+        return add_positions(data, album, page)
         #return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
 
 
@@ -133,8 +142,6 @@ def get_or_save_page(request, album_id, page_number):
             },
             ...
         ],
-        "page_number": "2",
-        "album_id": "1"
     },
     "success": true}
     '''
@@ -180,7 +187,8 @@ def get_or_save_page(request, album_id, page_number):
     }
     return HttpResponse(json.dumps({'success': True, 'page': page_information}), content_type='application/json')
 
-def add_positions(request, album, page):
+
+def add_positions(data, album, page):
     '''Adds positions with images and caption to an existing page. 
     Expects json in following format:
     {
@@ -209,51 +217,50 @@ def add_positions(request, album, page):
         ],
     }
     '''
-    if request.is_ajax():
-        if request.method == 'POST':                       
-            if(not album):
-                return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
-            if(not page):
-                return HttpResponse(json.dumps({'success': False, 'message': 'Page does not exist.'}), status=404, content_type='application/json')    
-            data = json.loads(request.raw_post_data)
-            #save all positions
-            for p in data['positions']:
-                image = None
-                caption = None
-                #save image
-                if('image' in p):
-                    image = Image(url = p['image'])              
-                    try:
-                        image.full_clean()
-                    except ValidationError, e:
-                        return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
-                    image.save()
-                #save caption            
-                if('caption' in p):
-                    caption = Caption(content = p['caption']['content'], font = p['caption']['font'])              
-                    try:
-                        caption.full_clean()
-                    except ValidationError, e:
-                        return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
-                    caption.save()
-                position = Position(
-                    x = p['x'], 
-                    y = p['y'], 
-                    z = p['z'], 
-                    h = p['h'], 
-                    w = p['w'], 
-                    image = image,
-                    caption = caption
-                )          
-                #validate, save and add many to many relationship
+    if(not album):
+        return HttpResponse(json.dumps({'success': False, 'message': 'Album does not exist.'}), status=404, content_type='application/json')    
+    if(not page):
+        return HttpResponse(json.dumps({'success': False, 'message': 'Page does not exist.'}), status=404, content_type='application/json')    
+    
+    #save all positions
+    if(data):
+        for p in data['positions']:
+            image = None
+            caption = None
+            #save image
+            if('image' in p):
+                image = Image(url = p['image'])              
                 try:
-                    position.full_clean()
+                    image.full_clean()
                 except ValidationError, e:
                     return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
-                position.save()
-                page.positions.add(position)
-                
+                image.save()
+            #save caption            
+            if('caption' in p):
+                caption = Caption(content = p['caption']['content'], font = p['caption']['font'])              
+                try:
+                    caption.full_clean()
+                except ValidationError, e:
+                    return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
+                caption.save()
+            position = Position(
+                x = p['x'], 
+                y = p['y'], 
+                z = p['z'], 
+                h = p['h'], 
+                w = p['w'], 
+                image = image,
+                caption = caption
+            )          
+            #validate, save and add many to many relationship
+            try:
+                position.full_clean()
+            except ValidationError, e:
+                return HttpResponse(json.dumps({'success': False, 'message': e.message_dict}), status=404, content_type='application/json')
+            position.save()
+            page.positions.add(position)
             
+    
     return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
 
     

@@ -12,13 +12,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 urlpatterns = patterns('',
     url(r'^$', Index.as_view(), name='index'),
     #albums list
-    url(r'^album/$', login_required(ListView.as_view(model = Album, template_name = 'photobook/album_list.html')), name='album_list_view'),
+    url(r'^album/$', ListView.as_view(model = Album, template_name = 'photobook/album_list.html'), name='album_list_view'),
     #album view
     url(r'^album/(?P<pk>\d+)/$', AlbumDetailView.as_view(model=Album, template_name='photobook/album_detail.html'), name='album_detail_view'), 
     #edit album
     url(r'^album/(?P<pk>\d+)/edit/$', UpdateView.as_view(model=Album, template_name='photobook/album_edit.html'), name='edit_book_view'),
     #new album
-    url(r'^album/create/$', create_album, name='create_album_view'),
+    url(r'^album/create/$', login_required(create_album), name='create_album_view'),
 	#page view
     url(r'^album/(?P<album>\d+)/(?P<page_number>\d+)/$', page_detail, name='page_detail_view'),   
 	#login view
@@ -33,8 +33,6 @@ urlpatterns = patterns('',
     url(r'^users/(?P<user_name>\S+)/$', user_view, name="user_view"),
     #json get page information
     url(r'^album/(?P<album_id>\d+)/(?P<page_number>\d+)/json/$', get_or_save_page, name='get_or_save_page'),
-	#json add new page
-    url(r'^add/positions/$', add_positions, name='add_positions'),
     #Flickr search page
     url(r'^search/$', search, name="search"),
 	#flickr search result page
