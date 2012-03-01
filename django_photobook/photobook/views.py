@@ -79,13 +79,13 @@ def register(request):
         'form' : form
     }, context_instance=RequestContext(request))
     
-def user_view(request, user_name):
+def user_detail_view(request, user_name):
     is_owner = False;
     if (request.user.is_authenticated() and request.user.username == user_name):
         is_owner = True
     page_owner = User.objects.get(username=user_name)
     album_list = Album.objects.filter(user=page_owner)
-    return render_to_response('photobook/user_detail.html', {'page_owner' : page_owner, 'album_list' : album_list, 'is_owner' : is_owner }, context_instance=RequestContext(request))
+    return render_to_response('photobook/user_detail_view.html', {'page_owner' : page_owner, 'album_list' : album_list, 'is_owner' : is_owner }, context_instance=RequestContext(request))
 
 
 def get_or_save_page(request, album_id, page_number):
@@ -122,7 +122,11 @@ def get_or_save_page(request, album_id, page_number):
             page.save()
                     
         #save all positions 
-        data = json.loads(request.raw_post_data)
+        data = None
+        try:
+            data = json.loads(request.raw_post_data)
+        except:
+            pass
         return add_positions(data, album, page)
         #return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
 

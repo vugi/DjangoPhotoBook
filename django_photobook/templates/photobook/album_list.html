@@ -4,13 +4,13 @@
 <!-- Header -->
 {% endblock %}
 
-{% block nav_list %}<li id="menuList" class="active"><a href="{% url photobook:album_list_view %}">Albums</a></li>{% endblock %}
+{% block nav_list %}<li id="menuList" class="active"><a href="{% url photobook:album_list_view %}">All albums</a></li>{% endblock %}
  
 {% block body %}
 
 <div class="page-header">
-<a href="create" class="btn btn-primary pull-right">New album</a>
-<h1>Albums</h1>
+<a href="{% url photobook:create_album_view %}" class="btn btn-primary pull-right">New album</a>
+<h1>All albums</h1>
 </div>
 
 <ul class="thumbnails">

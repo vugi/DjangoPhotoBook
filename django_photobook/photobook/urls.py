@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     #user list
     url(r'^user/$', login_required(ListView.as_view(model = User, template_name = 'photobook/user_list.html')), name='user_list_view'),
     #user detail view
-    url(r'^users/(?P<user_name>\S+)/$', user_view, name="user_view"),
+    url(r'^users/(?P<user_name>\S+)/$', user_detail_view, name="user_detail_view"),
     #json get page information
     url(r'^album/(?P<album_id>\d+)/(?P<page_number>\d+)/json/$', get_or_save_page, name='get_or_save_page'),
     #Flickr search page

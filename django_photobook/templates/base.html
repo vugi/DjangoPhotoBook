@@ -25,7 +25,10 @@
 			<ul class="nav">
 			{% block nav %}
 				{% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %} 
-				{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">Albums</a></li>{% endblock %}
+				{% if user.username %} 
+					{% block nav_youralbums %}<li id="menuUser"><a href="{% url photobook:user_detail_view user.username %}">Your albums</a></li>{% endblock %}
+				{% endif %}
+				{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">All albums</a></li>{% endblock %}
 				{% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">Users</a></li>{% endblock %}
 				{% block nav_search %}<li id="menuSearch"><a href="{% url photobook:search %}">Flickr Search</a></li>{% endblock %}
                 
@@ -44,7 +47,6 @@
             {% block nav_loggedout_msg %}{% endblock%}
 			<li id="menuRegister"><a href="{% url photobook:register %}">Register</a></li>
 			<li id="menuLogin"><a href="{% url photobook:login %}">Login</a></li>
-            
 			</ul>
 			{% endif %}
 		</div>
