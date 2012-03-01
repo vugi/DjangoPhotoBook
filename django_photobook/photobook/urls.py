@@ -22,9 +22,9 @@ urlpatterns = patterns('',
 	#page view
     url(r'^album/(?P<album>\d+)/(?P<page_number>\d+)/$', page_detail, name='page_detail_view'),   
 	#login view
-	url(r'^login/$', 'django.contrib.auth.views.login'),
+	url(r'^login/$', 'django.contrib.auth.views.login', name="login"),
 	#logout view
-	url(r'^logout/$', 'django.contrib.auth.views.logout', name="logout"),
+	url(r'^logout/$', logout_view, name="logout"),
 	#register view
 	url(r'^register/$', register, name="register"),
     #user list

@@ -4,9 +4,11 @@ from django import forms
 from django.views.generic import View, CreateView, DeleteView, DetailView, TemplateView, UpdateView, ListView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
+from django.contrib import messages
 
 from django.core import serializers
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -353,3 +355,9 @@ def create_album(request):
         return render_to_response("photobook/create_album.html", {
                 'form' : form
             }, context_instance=RequestContext(request))
+
+def logout_view(request):
+    logout(request)
+    logged_out = True
+    messages.info(request, "Logged out succesfully!")
+    return render_to_response("photobook/index.html", { 'logged_out' : logged_out }, context_instance=RequestContext(request))

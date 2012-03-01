@@ -112,6 +112,8 @@ LOGIN_URL = "/login/"
 
 LOGOUT_URL = "/logout/"
 
+LOGIN_REDIRECT_URL = '/album/'
+
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
