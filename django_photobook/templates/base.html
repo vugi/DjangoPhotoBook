@@ -10,9 +10,12 @@
  
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" />
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
 
-{% block header %}
-{% endblock %}
+	{% block header %}
+	{% endblock %}
 
 </head>
 <body>
@@ -31,17 +34,14 @@
 				{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">All albums</a></li>{% endblock %}
 				{% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">Users</a></li>{% endblock %}
 				{% block nav_search %}<li id="menuSearch"><a href="{% url photobook:search %}">Flickr Search</a></li>{% endblock %}
-                
 			{% endblock %}
 			</ul>
-			
-			
 			
 			{% if user.username %}
 			<ul class="nav pull-right">
 			<li id="menuLogout"><a href="{% url photobook:logout %}">Logout</a></li>
 			</ul>
-			<p class="navbar-text pull-right">Logged in as <a href="#">{{user.username}}</a></p>
+			<p class="navbar-text pull-right">Logged in as <a href="{% url photobook:user_detail_view user.username %}">{{user.username}}</a></p>
 			{% else %}
 			<ul class="nav pull-right">
             {% block nav_loggedout_msg %}{% endblock%}
@@ -57,9 +57,6 @@
 			{% block body %}
 			{% endblock %}
 	</div>
-	
-	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script src="{{ STATIC_URL }}js/bootstrap.js"></script>-->
 </body>
 </html>
 

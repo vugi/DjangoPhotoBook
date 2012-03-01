@@ -1,4 +1,11 @@
-/* Photobook common.js */
+/* 
+ * Photobook 
+ *
+ * common.js 
+ *
+ * This file includes all shared components between view and edit -modes
+ *
+ */
 
 $(document).ready(function(){
 	console.log("[common.js] document ready");
@@ -7,7 +14,7 @@ $(document).ready(function(){
 		if(page+1<=pages){
 			console.log("Next page");
 			page++;
-			loadPage(album,page);
+			loadPage(album,page,pageChangeCallback);
 		} else {
 			console.log("No next page");
 		}
@@ -17,15 +24,11 @@ $(document).ready(function(){
 		if(page-1>0){
 			console.log("Previous page");
 			page--;
-			loadPage(album,page);
+			loadPage(album,page,pageChangeCallback);
 		} else {
 			console.log("No previous page");
 		}
 	});
-    
-    if ($("#logout").length) {
-        $("#logout").delay(1200).fadeOut(1000);
-    }
 });
 
 function loadPage(album,page,callback){
@@ -69,7 +72,9 @@ function loadPage(album,page,callback){
 		}
 		
 		$("#loader").hide();
-		callback();
+		if(typeof callback == "function"){
+			callback();
+		}
 	});
 }
 

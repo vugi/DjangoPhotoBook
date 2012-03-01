@@ -1,120 +1,70 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<!-- Header -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- Album editor header -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-lightness/jquery-ui.css" type="text/css" />
 <script src="{{ STATIC_URL }}js/ajax_csrf.js"></script>
 <script src="{{ STATIC_URL }}js/common.js"></script>
+<script src="{{ STATIC_URL }}js/edit.js"></script>
 
 <script type="text/javascript">
-
 var album = {{ album.id }};
 var page = 1;
-var pages = 2; /*{{ page_list|length }}*/
-
-$(function() {
-	loadPage(album,page,function(){
-		$("#page img").draggable();
-	});
-	
-	/* Old stuff below */
-
-	//json add positions test
-	$("#page_test").click(function () {
-		$.ajax({
-		   	url: '/album/1/1/json/',
-		    type: 'POST',
-		    contentType: 'application/json; charset=utf-8',
-		    success: function(result) {
-		        alert("page added");
-		    }
-		});
-	});
-	 $("#position_test").click(function () {
-		 var page = 
-		{
-        //"album_id": 1,
-        //"page_number": 1,
-        "positions": [
-	    	{
-	       		"image": "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcRjoMXVbAnuQ6_8_xkEcsJuVjRnnPIWb08IMEZjTebU63Ryy-Yr8g",
-	       		"x": "32",
-	       		"y": "31",
-	       		"z": "1",
-	       		"h": "201",
-	       		"w": "202"
-	       	},
-	    	{
-	       		"image": "http://images04.olx.ae/ui/11/82/73/1300864362_180207973_1-Pictures-of--japanese-spitz-puppy-for-sale.jpg",
-	       		"x": "300",
-	       		"y": "120",
-	       		"z": "1",
-	       		"h": "200",
-	       		"w": "202"
-	       	},
-	    	{
-	       		"caption": {
-	       			"content": "Cute puppies ~<3",
-	       			"font": "basic" /* font_id */ 
-	       		},
-	       		"x": "50",
-	       		"y": "250",
-	       		"z": "1",
-	       		"h": "101",
-	       		"w": "102"
-	    	}
-	    ],
-		};
-		$.ajax({
-		   	url: '/album/1/1/json/',
-		    type: 'POST',
-		    contentType: 'application/json; charset=utf-8',
-		    data: JSON.stringify(page),
-		    dataType: 'text',
-		    success: function(result) {
-		        alert("positions added");
-		    }
-		});
-	});
-
-});
+var pages = {{ page_list|length }};
 </script>
-
 
 {% endblock %}
 
 {% block body %}
 
 <div class="page-header">
-{% if is_owner %} 
+
 <div class="pull-right">
-<a href="#" class="btn btn-primary">Edit Album</a>
-<a href="delete" class="btn btn-danger">Delete Album</a>
+<a id="addImage" data-toggle="modal" href="#addImageModal" class="btn">Add image</a>
+<a id="addText" href="#" class="btn">Add text</a>
+
+<a id="savePage" href="#" class="btn btn-success" style="margin-left:20px">Save page</a>
+<a id="deletePage" href="delete" class="btn btn-danger">Delete page</a>
+
+<a id="addPage" href="#" class="btn btn-primary" style="margin-left:20px">Add page</a>
 </div>
-{% endif %}
+
 <h1><span class="label label-important" style="vertical-align: 0.5em;">Edit</span> {{ album.name }}</h1>
 </div>
 
+<div class="btn-group" style="padding-bottom: 10px">
+	
+</div>
+
 <div id="pageContainer">
-
-<a href="#" id="previous" class="arrow left"></a>
-
-<div id="pages" style="position: relative;">
-	<article id="page" class="page" style="height: {{ album.height }}px; width: {{ album.width }}px;"></article>
-	<div id='loader'>
-		<div id='circle_1' class='circle'></div>
-		<div id='circle_2' class='circle'></div>
-		<div id='circle_3' class='circle'></div>
+	<a href="#" id="previous" class="arrow left"></a>
+	
+	<div id="pages" style="position: relative;">
+		<article id="page" class="page" style="height: {{ album.height }}px; width: {{ album.width }}px;"></article>
+		<div id='loader'>
+			<div id='circle_1' class='circle'></div>
+			<div id='circle_2' class='circle'></div>
+			<div id='circle_3' class='circle'></div>
+		</div>
 	</div>
+	
+	<a href="#" id="next" class="arrow right"></a>
 </div>
 
-<a href="#" id="next" class="arrow right"></a>
-
+<div class="modal fade" id="addImageModal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Add image</h3>
+  </div>
+  <div class="modal-body">
+    <p>Insert URL:</p>
+    <input id="newImageUrl" type="text" value="http://farm8.staticflickr.com/7186/6885794027_d207103cc5.jpg" />
+  </div>
+  <div class="modal-footer">
+    <a href="#" id="addImageModalBtn" class="btn btn-primary" data-dismiss="modal">Add image</a>
+    <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+  </div>
 </div>
-
-
-<button id="position_test"> position test</button>
-<button id="page_test"> page test</button>
 
 {% endblock %}

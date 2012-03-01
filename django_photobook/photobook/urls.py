@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     #album view
     url(r'^album/(?P<pk>\d+)/$', AlbumDetailView.as_view(model=Album, template_name='photobook/album_detail.html'), name='album_detail_view'), 
     #edit album
-    url(r'^album/(?P<pk>\d+)/edit/$', UpdateView.as_view(model=Album, template_name='photobook/album_edit.html'), name='edit_book_view'),
+    url(r'^album/(?P<pk>\d+)/edit/$', AlbumDetailView.as_view(model=Album, template_name='photobook/album_edit.html'), name='edit_book_view'),
     #new album
     url(r'^album/create/$', login_required(create_album), name='create_album_view'),
 	#page view
