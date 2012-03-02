@@ -29,7 +29,7 @@ var pages = {{ page_list|length }};
 
 <div class="btn-group">
 <a id="savePage" href="#" class="btn"><i class="icon-file "></i> Save page</a>
-<a id="deletePage" href="delete" class="btn "><i class="icon-trash "></i> Delete page</a>
+<a id="deletePage" href="#" class="btn "><i class="icon-trash "></i> Delete page</a>
 <a id="addPage" href="#" class="btn"><i class="icon-plus"></i> Add page</a>
 </div>
 
@@ -66,8 +66,29 @@ var pages = {{ page_list|length }};
     <h3>Add image</h3>
   </div>
   <div class="modal-body">
-    <p>Insert URL:</p>
-    <input id="newImageUrl" type="text" value="http://farm8.staticflickr.com/7186/6885794027_d207103cc5.jpg" />
+    
+    <ul class="nav nav-tabs">
+	  <li class="active" ><a href="#url" data-toggle="tab">URL</a></li>
+	  <li><a href="#flickr" data-toggle="tab">Flickr</a></li>
+	  <li><a href="#other" data-toggle="tab">Other</a></li>
+	</ul>
+	 
+	<div class="tab-content">
+	  <div class="tab-pane active" id="url">
+	  	<form class="well">
+	  		<label>Full image URL:</label>
+   	 		<input id="newImageUrl" type="text" value="" style="width:100%" />
+   	 		<img id="previewImg" alt="preview" />
+   	 	</form>
+	  </div>
+	  <div class="tab-pane" id="flickr">
+	  	Let's implement flickr search here
+	  </div>
+	  <div class="tab-pane" id="other">
+	  	Some other input method as well?
+	  </div>
+	</div>
+    
   </div>
   <div class="modal-footer">
     <a href="#" id="addImageModalBtn" class="btn btn-primary" data-dismiss="modal">Add image</a>

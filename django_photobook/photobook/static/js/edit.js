@@ -34,6 +34,11 @@ $(function() {
 		makeEditable();
 	});
 	
+	$("#newImageUrl").bind("propertychange keyup input paste", function(){
+		console.log("changed");
+		$("#previewImg").attr("src",$("#newImageUrl").val());
+	});
+	
 	$("#savePage").click(function(){
 		var positions = [];
 		
