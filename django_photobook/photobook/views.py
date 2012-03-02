@@ -330,7 +330,7 @@ def delete_page(request, album, page_number):
             if (p.number > page_number):
                 p.number = p.number - 1
                 p.save()
-        return HttpResponseRedirect("/album/"+str(current_album.id)+"/")
+        return HttpResponseRedirect("/album/"+str(current_album.id)+"/edit/")
     else:
         return HttpResponseRedirect("/")
 

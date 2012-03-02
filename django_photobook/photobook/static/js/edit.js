@@ -71,6 +71,10 @@ $(function() {
 		});
 	});
 	
+	$("#deletePage").click(function () {
+		window.location = "../"+page+"/delete";
+	});
+	
 	$("#addPage").click(function () {
 		$.ajax({
 		   	url: "/album/"+album+"/"+(pages+1)+"/json/",
