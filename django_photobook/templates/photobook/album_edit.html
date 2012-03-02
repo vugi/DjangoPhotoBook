@@ -83,7 +83,13 @@ var pages = {{ page_list|length }};
    	 	</form>
 	  </div>
 	  <div class="tab-pane" id="flickr">
-	  	Let's implement flickr search here
+	  	<form class="well">
+	  		<label>Search through Flickr</label>
+   	 		<input id="search" type="text" value="" style="width:100%" />
+            <button type="button" id="searchBtn">Search</button> 
+   	 	</form>
+        <div id="results">
+        </div>
 	  </div>
 	  <div class="tab-pane" id="other">
 	  	Some other input method as well?
