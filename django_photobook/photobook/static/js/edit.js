@@ -40,6 +40,7 @@ $(function() {
 	});
 	
 	$("#savePage").click(function(){
+		$("#savePage").button('loading');
 		var positions = [];
 		
 		$("#page img").each(function(){
@@ -66,7 +67,8 @@ $(function() {
 		    data: JSON.stringify(obj),
 		    dataType: 'text',
 		    success: function(result) {
-		        alert("page saved!");
+		        console.log("page saved!");
+		        $("#savePage").button('reset');
 		    }
 		});
 	});

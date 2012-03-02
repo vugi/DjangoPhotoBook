@@ -5,6 +5,7 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/ui-lightness/jquery-ui.css" type="text/css" />
 <script src="{{ STATIC_URL }}js/ajax_csrf.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
 <script src="{{ STATIC_URL }}js/common.js"></script>
 <script src="{{ STATIC_URL }}js/edit.js"></script>
 
@@ -28,7 +29,7 @@ var pages = {{ page_list|length }};
 </div>
 
 <div class="btn-group">
-<a id="savePage" href="#" class="btn"><i class="icon-file "></i> Save page</a>
+<a id="savePage" href="#" class="btn" data-loading-text="Saving.."><i class="icon-file"></i> Save page</a>
 <a id="deletePage" href="#" class="btn "><i class="icon-trash "></i> Delete page</a>
 <a id="addPage" href="#" class="btn"><i class="icon-plus"></i> Add page</a>
 </div>
