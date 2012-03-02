@@ -22,6 +22,12 @@ article.page {
   	-webkit-box-shadow:0 0 5px #888888;
 }
 
+/* Edit view */
+
+.btn-toolbar {
+	margin: 0; /* Overwrite bootstrap */
+}
+
 /* CSS-only triangles */
 
 .arrow {

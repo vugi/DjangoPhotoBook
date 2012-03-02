@@ -20,14 +20,22 @@ var pages = {{ page_list|length }};
 
 <div class="page-header">
 
-<div class="pull-right">
-<a id="addImage" data-toggle="modal" href="#addImageModal" class="btn">Add image</a>
-<a id="addText" href="#" class="btn">Add text</a>
+<div class="pull-right btn-toolbar">
 
-<a id="savePage" href="#" class="btn btn-success" style="margin-left:20px">Save page</a>
-<a id="deletePage" href="delete" class="btn btn-danger">Delete page</a>
+<div class="btn-group">
+<a id="addImage" data-toggle="modal" href="#addImageModal" class="btn"><i class="icon-picture"></i> Add image</a>
+<a id="addText" href="#" class="btn"><i class="icon-pencil"></i> Add text</a>
+</div>
 
-<a id="addPage" href="#" class="btn btn-primary" style="margin-left:20px">Add page</a>
+<div class="btn-group">
+<a id="savePage" href="#" class="btn"><i class="icon-file "></i> Save page</a>
+<a id="deletePage" href="delete" class="btn "><i class="icon-trash "></i> Delete page</a>
+<a id="addPage" href="#" class="btn"><i class="icon-plus"></i> Add page</a>
+</div>
+
+<div class="btn-group">
+<a id="addPage" href="../" class="btn btn-primary" style=""><i class="icon-ok icon-white"></i> Done</a>
+</div>
 </div>
 
 <h1><span class="label label-important" style="vertical-align: 0.5em;">Edit</span> {{ album.name }}</h1>
