@@ -16,6 +16,7 @@ function makeEditable(){
 	$("#page img")
 		.resizable({aspectRatio: true})
 		.parent().draggable({ containment: 'parent' });
+    $( "#page img" ).resizable( "option", "containment", "parent" );
 }
 
 $(function() {
