@@ -7,5 +7,5 @@ class SearchForm(forms.Form):
 
 class modelCreationForm(forms.Form):
     album_name = forms.CharField(min_length=3)
-    album_height = forms.IntegerField(min_value=1)
-    album_width = forms.IntegerField(min_value=1)
+    album_height = forms.IntegerField(min_value=1, max_value=800)
+    album_width = forms.IntegerField(min_value=1, max_value=800)

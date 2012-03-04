@@ -29,6 +29,13 @@ $(document).ready(function(){
 			console.log("No previous page");
 		}
 	});
+    
+    $("#deleteAlbum").click(function() {
+        var r=confirm("Are you sure? This will delete the album permanently.");
+        if (r==true) {
+                window.location = "delete";
+        }
+    });
 });
 
 function loadPage(album,page,callback){
