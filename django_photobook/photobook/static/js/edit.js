@@ -100,7 +100,11 @@ $(function() {
 	});
 	
 	$("#deletePage").click(function () {
-		window.location = "../"+page+"/delete";
+        console.log("Delete pressed")
+		var r=confirm("Are you sure? This will delete the page permanently.");
+        if (r==true) {
+                window.location = "../"+page+"/delete";
+        }
 	});
 	
 	$("#addPage").click(function () {
