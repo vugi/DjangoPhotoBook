@@ -33,10 +33,6 @@ urlpatterns = patterns('',
     url(r'^users/(?P<user_name>\S+)/$', user_detail_view, name="user_detail_view"),
     #json get page information
     url(r'^album/(?P<album_id>\d+)/(?P<page_number>\d+)/json/$', get_or_save_page, name='get_or_save_page'),
-    #Flickr search page
-    url(r'^search/$', search, name="search"),
-	#flickr search result page
-    url(r'^search/results/$', search_result, name="search_result"),
     #delete album
     url(r'^album/(?P<album_id>\d+)/delete/$', delete_album, name="delete_album"),
     #delete page
