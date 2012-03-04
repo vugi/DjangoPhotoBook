@@ -3,6 +3,7 @@ from django.conf import settings
 from django import forms
 from django.views.generic import View, CreateView, DeleteView, DetailView, TemplateView, UpdateView, ListView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -66,7 +67,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect("/album/")
+            return HttpResponseRedirect(reverse('photobook:album_list_view'))
         else:
             return render_to_response("registration/register.html", {
                 'form' : form
@@ -275,9 +276,9 @@ def delete_album(request, album_id):
     if (logged_user.id == album_owner.id):
         album = Album.objects.get(id=album_id)
         album.delete()
-        return HttpResponseRedirect("/album/")
+        return HttpResponseRedirect(reverse('photobook:album_list_view'))
     else:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect(reverse('photobook:index'))
 
 def delete_page(request, album, page_number):
     logged_user = request.user
@@ -293,9 +294,9 @@ def delete_page(request, album, page_number):
             if (p.number > page_number):
                 p.number = p.number - 1
                 p.save()
-        return HttpResponseRedirect("/album/"+str(current_album.id)+"/edit/")
+        return HttpResponseRedirect(reverse('photobook:edit_album_view', args=(current_album.id,)))
     else:
-        return HttpResponseRedirect("/")
+       return HttpResponseRedirect(reverse('photobook:index'))
 
 @login_required    
 def create_album(request):
@@ -309,10 +310,16 @@ def create_album(request):
             try:
                 new_album.full_clean()
                 new_album.save()
-                return HttpResponseRedirect("/users/" + request.user.username + "/")
+                #save a new page
+                page = Page(
+                    album = Album.objects.get(id=new_album.id), 
+                    number = 1
+                )
+                page.save()
+                return HttpResponseRedirect(reverse('photobook:user_detail_view', args=(request.user.username,)))
             except ValidationError, e:
                 print "Failed to validate the model object."
-                return HttpResponseRedirect("/")
+                return HttpResponseRedirect(reverse('photobook:index'))
         else:
             return render_to_response("photobook/create_album.html", {
                 'form' : form
