@@ -16,10 +16,11 @@ function makeEditable(){
 	$("#page img")
 		.resizable({aspectRatio: true})
 		.parent().draggable({ containment: 'parent' });
+    $( "#page img" ).resizable( "option", "containment", "parent" );
 }
 
 $(function() {
-	
+	var $currentPicture = undefined;
 	loadPage(album,page,function(){
 		makeEditable();
 	});
@@ -28,7 +29,8 @@ $(function() {
 		var url = $("#newImageUrl").val();
 		console.log(url);
 		var $img = $("<img>")
-			.attr("src",url)
+			.attr({src: url,
+                   id: 'addedImage'})
 			.appendTo("#page");
 
 		makeEditable();
@@ -38,11 +40,23 @@ $(function() {
         var url = $(this).attr("src");
 		console.log(url);
 		var $img = $("<img>")
-			.attr("src",url)
+			.attr({src: url,
+                   id: 'addedImage'})
 			.appendTo("#page");
 
 		makeEditable();
-    });  
+    });
+    
+    $(document).on("click", "#addedImage", function(){
+        console.log("Clicked a addedImage.");
+        $currentPicture = $(this)
+    });
+    
+    $("#deleteImage").click(function() {
+        if ($currentPicture!== undefined) {
+            $currentPicture.remove();
+        }
+    });
 	
 	$("#newImageUrl").bind("propertychange keyup input paste", function(){
 		console.log("changed");
