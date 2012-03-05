@@ -32,8 +32,8 @@ var pageChangeCallback = function(){
 	makeEditable();
 };
 
-
 function savePage(){
+	$("#savePage").button('loading');
 	var positions = [];
 	
 	$("#page img").each(function(){
@@ -62,7 +62,7 @@ function savePage(){
 	    dataType: 'text',
 	    success: function(result) {
 	        console.log("page saved!");
-	        //$("#savePage").button('reset');
+	        $("#savePage").button('reset');
 	    }
 	});
 };
@@ -103,14 +103,9 @@ function makeImgEditable($img){
 					$("#hover-delete-button").remove();
 				}
 			)
-			.on("resize", function() {
-				editTimeout.setup();
-			})
-			.on("drag", function() {
+			.on("resize drag", function() {
 				editTimeout.setup();
 			});
-
-	editTimeout.setup();
 }
 
 function makeCaptionEditable($div){
@@ -137,7 +132,10 @@ function makeCaptionEditable($div){
 			function() {
 				$("#hover-delete-button").remove();
 			}
-		);
+		)
+		.on("resize drag", function() {
+			editTimeout.setup();
+		});
 }
 
 function addImage(url){
@@ -147,9 +145,26 @@ function addImage(url){
 		.appendTo("#page");
 
 	makeImgEditable($img);
+	editTimeout.setup();
 }
 
+function addCaption(text,font){
+	var text = $("<div>"+text+"</div>")
+		.attr("class","caption " + font)
+		.data("font",font)
+		.css("z-index",100)
+		.appendTo("#page");
+		
+	makeCaptionEditable(text);
+	editTimeout.setup();	
+}
+
+// Document ready callback
+
 $(function() {
+
+	/* Load the first page and make it editable */
+	
 	loadPage(album,page,function(){
 		makeEditable();
 	});
@@ -185,23 +200,15 @@ $(function() {
     /* Adding captions */
     
     $("#addCaptionModalBtn").click(function(){
+    	var text = $("#newCaption").val();
     	var font = $('input:radio[name=styleSelect]:checked').val();
-    
-		var text = $("<div>"+$("#newCaption").val()+"</div>")
-			.attr("class","caption " + font)
-			.data("font",font)
-			.css("z-index",100)
-			.appendTo("#page");
-			
-		makeCaptionEditable(text);
+    	addCaption(text,font)
 	});
 	
 	/* Saving page */
 	
 	$("#savePage").click(function(){
-		$("#savePage").button('loading');
 		savePage();
-		$("#savePage").button('reset');
 	});
 	
 	$("#deletePage").click(function () {
