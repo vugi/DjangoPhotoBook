@@ -8,34 +8,72 @@
  */
 
 var pageChangeCallback = function(){
-	makeEditable($("#page img"));
+	makeEditable();
 };
 
-/* Set images resizable, draggable and movable */
-function makeEditable($img){
-	$("#page img")
+function makeEditable(){
+	makeImgEditable();
+	makeCaptionEditable();
+}
+
+/* Set images resizable, draggable and removable */
+function makeImgEditable($img){
+	console.log("makeImgEditable",$img);
+	
+	// If image is not set, let's use all images in the page
+	if (typeof($img) === "undefined"){
+		$img = $("#page img")
+	}
+	
+	$img
+		/* Make resizable using JQuery UI */
 		.resizable({aspectRatio: true, containment: 'parent'})
-		.parent().draggable({ containment: 'parent' });
-    
-    //add a remove button on hover
-    $img.parent().hover(
-    	function() {
-			var $button = $("<div>")
-			.attr({id: 'hover-delete-button'})
-			.appendTo($(this));
-			var $icon = $("<i>")
-			.attr({class: 'icon-remove'})
-			.appendTo($button);
-			
-			$("#hover-delete-button").click(function() {
-				console.log("delete", $(this).siblings("img"));
-				$(this).siblings("img").remove();
-			});
-		},
-		function() {
-			$("#hover-delete-button").remove();
-		}
-    );
+		/* Resizable will generate a parent div around img, let's use it */
+		.parent()
+			/* Make draggable using JQuery UI */
+			.draggable({ containment: 'parent' })
+			/* Add delete-button on hover */
+			.hover(function() {
+					$("<div id='hover-delete-button'><i class='icon-remove'></i></div>")
+						.click(function() {
+							var img = $(this).siblings("img");
+							console.log("Delete image", img);
+							img.remove();
+						})
+						.appendTo($(this));
+				},
+				/* Remove button on unhover */
+				function() {
+					$("#hover-delete-button").remove();
+				}
+			);
+}
+
+function makeCaptionEditable($div){
+	console.log("makeCaptionEditable",$div);
+	
+	// If caption is not set, let's use all captions in the page
+	if (typeof($div) === "undefined"){
+		$div = $("#page div.caption")
+	}
+
+	$div
+    	.resizable({ containment: 'parent'})
+		.draggable({ containment: 'parent'})
+		.hover(function() {
+				$("<div id='hover-delete-button'><i class='icon-remove'></i></div>")
+					.click(function() {
+						var $div = $(this);
+						console.log("Delete caption", $div);
+						$div.remove();
+					})
+					.appendTo($(this));
+			},
+			/* Remove button on unhover */
+			function() {
+				$("#hover-delete-button").remove();
+			}
+		);
 }
 
 function addImage(url){
@@ -44,12 +82,22 @@ function addImage(url){
 		.attr({src: url})
 		.appendTo("#page");
 
-	makeEditable($img);
+	makeImgEditable($img);
 }
 
 $(function() {
 	loadPage(album,page,function(){
-		makeEditable($("#page img"));
+		makeEditable();
+	});
+	
+	$("#addText").click(function(){
+		var text = $("<div>"+"Hello World"+"</div>")
+			.attr("class","caption")
+			.css("position","absolute")
+			.css("z-index",100)
+			.appendTo("#page");
+			
+		makeCaptionEditable(text);
 	});
 	
 	$("#addImageModalBtn").click(function(){
