@@ -16,8 +16,8 @@ var pageChangeCallback = function(){
 function makeEditable($img){
 	$("#page img")
 		.resizable({aspectRatio: true})
+		.resizable( "option", "containment", "parent" )
 		.parent().draggable({ containment: 'parent' });
-    $( "#page img" ).resizable( "option", "containment", "parent" );
     
     //add a remove button on hover
     $img.parent().hover(
@@ -41,7 +41,7 @@ function makeEditable($img){
 }
 
 $(function() {
-	var $currentPicture = undefined;
+
 	loadPage(album,page,function(){
 		makeEditable($("#page img"));
 	});
@@ -50,9 +50,9 @@ $(function() {
 		var url = $("#newImageUrl").val();
 		console.log(url);
 		var $img = $("<img>")
-			.attr({src: url,
-                   id: 'addedImage'})
+			.attr({src: url})
 			.appendTo("#page");
+		console.log("img", $img);
 
 		makeEditable($img);
 	});
@@ -61,23 +61,12 @@ $(function() {
         var url = $(this).attr("src");
 		console.log(url);
 		var $img = $("<img>")
-			.attr({src: url,
-                   id: 'addedImage'})
+			.attr({src: url})
 			.appendTo("#page");
-
+		console.log("img", $img);
+		
 		makeEditable($img);
     });
-    
-    $(document).on("click", "#addedImage", function(){
-        console.log("Clicked a addedImage.");
-        $currentPicture = $(this)
-    });
-    
-    /*$("#deleteImage").click(function() {
-        if ($currentPicture!== undefined) {
-            $currentPicture.remove();
-        }
-    });*/
 	
 	$("#newImageUrl").bind("propertychange keyup input paste", function(){
 		console.log("changed");
