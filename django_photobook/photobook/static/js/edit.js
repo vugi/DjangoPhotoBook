@@ -63,24 +63,23 @@ function savePage(){
 	    success: function(result) {
 	        console.log("page saved!");
 	        //$("#savePage").button('reset');
-	        //return true;
 	    }
 	});
 };
 
+
 /* Set images resizable, draggable and movable */
 function makeEditable($img){
 	$("#page img")
-		.resizable({aspectRatio: true})
-		.resizable( "option", "containment", "parent" )
+		.resizable({aspectRatio: true, containment: 'parent'})
 		.parent().draggable({ containment: 'parent' })
 		.on("resize", function() {
 			editTimeout.setup();
 		})
 		.on("drag", function() {
 			editTimeout.setup();
-		});
-    
+		});    
+		
     //add a remove button on hover
     $img.parent().hover(
     	function() {
@@ -92,8 +91,10 @@ function makeEditable($img){
 			.appendTo($button);
 			
 			$("#hover-delete-button").click(function() {
+				//remove image if button clicked
 				console.log("delete", $(this).siblings("img"));
 				$(this).siblings("img").remove();
+				editTimeout.setup();
 			});
 		},
 		function() {
@@ -103,50 +104,41 @@ function makeEditable($img){
     editTimeout.setup();
 }
 
-$(function() {
+function addImage(url){
+	console.log("Add image " + url);
+	var $img = $("<img>")
+		.attr({src: url})
+		.appendTo("#page");
 
+	makeEditable($img);
+}
+
+$(function() {
 	loadPage(album,page,function(){
 		makeEditable($("#page img"));
 	});
 	
 	$("#addImageModalBtn").click(function(){
-		var url = $("#newImageUrl").val();
-		console.log(url);
-		var $img = $("<img>")
-			.attr({src: url})
-			.appendTo("#page");
-		console.log("img", $img);
-
-		makeEditable($img);
+		addImage($("#newImageUrl").val());
 	});
     
     $(document).on("click", "#foundPicture", function(){
-        var url = $(this).attr("src");
-		console.log(url);
-		var $img = $("<img>")
-			.attr({src: url})
-			.appendTo("#page");
-		console.log("img", $img);
-		
-		makeEditable($img);
+    	addImage($(this).attr("src"));
     });
 	
 	$("#newImageUrl").bind("propertychange keyup input paste", function(){
-		console.log("changed");
+		console.log("#newImageUrl changed");
 		$("#previewImg").attr("src",$("#newImageUrl").val());
 	});
     
     $("#searchBtn").click(function() {
         var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=baeae16ada7e043585db45da91af1601&text=" + $("#search").val() + "&safe_search=1&per_page=20";
-        console.log(url);
         $("#results").empty();
         $.getJSON(url + "&format=json&jsoncallback=?", function(data) {
             $.each(data.photos.photo, function(i, item){
                 src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
-                console.log(src);
                 var img ='<img id="foundPicture" data-dismiss="modal" src="' + src + '"alt="' + item.title + '"width="100" height="100" />';
                 $("#results").append(img);
-                console.log(img);
                 if ( i == 3 ) return false;
             });
         });
