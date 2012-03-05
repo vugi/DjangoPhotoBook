@@ -122,7 +122,7 @@ function makeCaptionEditable($div){
 		.hover(function() {
 				$("<div id='hover-delete-button'><i class='icon-remove'></i></div>")
 					.click(function() {
-						var $div = $(this);
+						var $div = $(this).parent();
 						console.log("Delete caption", $div);
 						$div.remove();
 					})
