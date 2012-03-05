@@ -7,17 +7,79 @@
  *
  */
 
+//2s timeout for edit events, after which the page will be saved
+var editTimeout = {  
+      timeout: function() {  
+        savePage();
+        delete this.timeoutID;  
+      },  
+      
+      setup: function() {  
+        this.cancel();  
+        var self = this;  
+        this.timeoutID = window.setTimeout(function() {self.timeout();}, 2000); 
+      },  
+      
+      cancel: function() {  
+        if(typeof this.timeoutID == "number") {  
+          window.clearTimeout(this.timeoutID);  
+          delete this.timeoutID;  
+        }  
+      }  
+};  
+ 
 var pageChangeCallback = function(){
 	makeEditable($("#page img"));
 };
 
+
+function savePage(){
+	var positions = [];
+	
+	$("#page img").each(function(){
+		var $img = $(this);
+		var x = parseInt($img.parent().css("left"));
+		var y = parseInt($img.parent().css("top"));
+		positions.push({
+			"image": $img.attr("src"),
+			"w": parseInt($img.css("width")),
+			"h": parseInt($img.css("height")),
+			"x": x ? x : 0,
+			"y": y ? y : 0,
+			"z": 1
+		});
+	});
+
+	
+	var obj = { "positions" : positions };
+	console.log(obj);
+	
+	$.ajax({
+	   	url: "/album/"+album+"/"+page+"/json/",
+	    type: 'POST',
+	    contentType: 'application/json; charset=utf-8',
+	    data: JSON.stringify(obj),
+	    dataType: 'text',
+	    success: function(result) {
+	        console.log("page saved!");
+	        //$("#savePage").button('reset');
+	        //return true;
+	    }
+	});
+};
 
 /* Set images resizable, draggable and movable */
 function makeEditable($img){
 	$("#page img")
 		.resizable({aspectRatio: true})
 		.resizable( "option", "containment", "parent" )
-		.parent().draggable({ containment: 'parent' });
+		.parent().draggable({ containment: 'parent' })
+		.on("resize", function() {
+			editTimeout.setup();
+		})
+		.on("drag", function() {
+			editTimeout.setup();
+		});
     
     //add a remove button on hover
     $img.parent().hover(
@@ -38,6 +100,7 @@ function makeEditable($img){
 			$("#hover-delete-button").remove();
 		}
     );
+    editTimeout.setup();
 }
 
 $(function() {
@@ -91,37 +154,8 @@ $(function() {
 	
 	$("#savePage").click(function(){
 		$("#savePage").button('loading');
-		var positions = [];
-		
-		$("#page img").each(function(){
-			var $img = $(this);
-			var x = parseInt($img.parent().css("left"));
-			var y = parseInt($img.parent().css("top"));
-			positions.push({
-				"image": $img.attr("src"),
-				"w": parseInt($img.css("width")),
-				"h": parseInt($img.css("height")),
-				"x": x ? x : 0,
-				"y": y ? y : 0,
-				"z": 1
-			});
-		});
-
-		
-		var obj = { "positions" : positions };
-		console.log(obj);
-		
-		$.ajax({
-		   	url: "/album/"+album+"/"+page+"/json/",
-		    type: 'POST',
-		    contentType: 'application/json; charset=utf-8',
-		    data: JSON.stringify(obj),
-		    dataType: 'text',
-		    success: function(result) {
-		        console.log("page saved!");
-		        $("#savePage").button('reset');
-		    }
-		});
+		savePage();
+		$("#savePage").button('reset');
 	});
 	
 	$("#deletePage").click(function () {
@@ -145,6 +179,7 @@ $(function() {
 		    }
 		});
 	});
+	
 
 	/* "caption": {
 	       			"content": "Cute puppies ~<3",
