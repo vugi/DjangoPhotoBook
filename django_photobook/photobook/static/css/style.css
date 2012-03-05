@@ -100,16 +100,13 @@ Reused from Antti's previous project.
 }
 
 #hover-delete-button{
-	background: white; 
 	position:absolute;
-	right:0;
-	top:0; 
-	height: 18px; 
-	width: 18px;
-	margin: 3px;
-	-webkit-border-radius: 2px;
-  	-moz-border-radius: 2px;
-  	border-radius: 2px;
+	right: 5px;
+	top: 5px; 
+}
+
+.caption #hover-delete-button{
+	right: -40px;
 }
 
 #page{

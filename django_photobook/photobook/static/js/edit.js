@@ -90,7 +90,7 @@ function makeImgEditable($img){
 			.draggable({ containment: 'parent' })
 			/* Add delete-button on hover */
 			.hover(function() {
-					$("<div id='hover-delete-button'><i class='icon-remove'></i></div>")
+					$("<a id='hover-delete-button' class='btn btn-inverse'><i class='icon-trash icon-white'></i></a>")
 						.click(function() {
 							var img = $(this).siblings("img");
 							console.log("Delete image", img);
@@ -120,7 +120,7 @@ function makeCaptionEditable($div){
     	.resizable({ containment: 'parent'})
 		.draggable({ containment: 'parent'})
 		.hover(function() {
-				$("<div id='hover-delete-button'><i class='icon-remove'></i></div>")
+				$("<a id='hover-delete-button' class='btn btn-inverse'><i class='icon-trash icon-white'></i></a>")
 					.click(function() {
 						var $div = $(this).parent();
 						console.log("Delete caption", $div);
