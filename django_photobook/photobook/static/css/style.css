@@ -121,3 +121,25 @@ Reused from Antti's previous project.
 	left:0;
 	top:0;
 }
+
+/* Captions */
+
+.caption {
+	position: absolute !important;
+	text-shadow: 1px 1px 5px #fff;
+}
+
+.style-1 {
+	font-size: 36px;
+	line-height: 40px;
+}
+
+.style-2 {
+	font-size: 26px;
+	line-height: 28px;
+}
+
+.style-3 {
+	font-size: 20px;
+	line-height: 22px;
+}

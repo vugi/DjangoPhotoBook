@@ -67,8 +67,9 @@ function loadPage(album,page,callback){
 						.appendTo("#page");
 				} else if (position.caption) {
 					$("<div>"+position.caption.content+"</div>")
+						.attr("class", "caption " + position.caption.font)
+						.data("font", position.caption.font)
 						.css({
-							"position":"absolute", 
 							"left": position.x+"px",
 							"top": position.y+"px",
 							"height": position.h+"px",

@@ -54,7 +54,7 @@ function makeCaptionEditable($div){
 	
 	// If caption is not set, let's use all captions in the page
 	if (typeof($div) === "undefined"){
-		$div = $("#page div.caption")
+		$div = $("#page div.caption");
 	}
 
 	$div
@@ -90,15 +90,7 @@ $(function() {
 		makeEditable();
 	});
 	
-	$("#addText").click(function(){
-		var text = $("<div>"+"Hello World"+"</div>")
-			.attr("class","caption")
-			.css("position","absolute")
-			.css("z-index",100)
-			.appendTo("#page");
-			
-		makeCaptionEditable(text);
-	});
+	/* Adding images */
 	
 	$("#addImageModalBtn").click(function(){
 		addImage($("#newImageUrl").val());
@@ -125,6 +117,22 @@ $(function() {
             });
         });
     });
+    
+    /* Adding captions */
+    
+    $("#addCaptionModalBtn").click(function(){
+    	var font = $('input:radio[name=styleSelect]:checked').val();
+    
+		var text = $("<div>"+$("#newCaption").val()+"</div>")
+			.attr("class","caption " + font)
+			.data("font",font)
+			.css("z-index",100)
+			.appendTo("#page");
+			
+		makeCaptionEditable(text);
+	});
+	
+	/* Saving page */
 	
 	$("#savePage").click(function(){
 		$("#savePage").button('loading');
@@ -138,6 +146,23 @@ $(function() {
 				"image": $img.attr("src"),
 				"w": parseInt($img.css("width")),
 				"h": parseInt($img.css("height")),
+				"x": x ? x : 0,
+				"y": y ? y : 0,
+				"z": 1
+			});
+		});
+		
+		$("#page .caption").each(function(){
+			var $caption = $(this);
+			var x = parseInt($caption.css("left"));
+			var y = parseInt($caption.css("top"));
+			positions.push({
+				"caption": {
+	       			"content": $caption.text(),
+	       			"font": $caption.data("font")
+	       		},
+				"w": parseInt($caption.css("width")),
+				"h": parseInt($caption.css("height")),
 				"x": x ? x : 0,
 				"y": y ? y : 0,
 				"z": 1
@@ -181,11 +206,5 @@ $(function() {
 		    }
 		});
 	});
-
-	/* "caption": {
-	       			"content": "Cute puppies ~<3",
-	       			"font": "foobar"
-	       		}, 
-	*/
 
 });
