@@ -7,8 +7,64 @@
  *
  */
 
+//2s timeout for edit events, after which the page will be saved
+var editTimeout = {  
+      timeout: function() {  
+        savePage();
+        delete this.timeoutID;  
+      },  
+      
+      setup: function() {  
+        this.cancel();  
+        var self = this;  
+        this.timeoutID = window.setTimeout(function() {self.timeout();}, 2000); 
+      },  
+      
+      cancel: function() {  
+        if(typeof this.timeoutID == "number") {  
+          window.clearTimeout(this.timeoutID);  
+          delete this.timeoutID;  
+        }  
+      }  
+};  
+ 
 var pageChangeCallback = function(){
 	makeEditable();
+};
+
+
+function savePage(){
+	var positions = [];
+	
+	$("#page img").each(function(){
+		var $img = $(this);
+		var x = parseInt($img.parent().css("left"));
+		var y = parseInt($img.parent().css("top"));
+		positions.push({
+			"image": $img.attr("src"),
+			"w": parseInt($img.css("width")),
+			"h": parseInt($img.css("height")),
+			"x": x ? x : 0,
+			"y": y ? y : 0,
+			"z": 1
+		});
+	});
+
+	
+	var obj = { "positions" : positions };
+	console.log(obj);
+	
+	$.ajax({
+	   	url: "/album/"+album+"/"+page+"/json/",
+	    type: 'POST',
+	    contentType: 'application/json; charset=utf-8',
+	    data: JSON.stringify(obj),
+	    dataType: 'text',
+	    success: function(result) {
+	        console.log("page saved!");
+	        //$("#savePage").button('reset');
+	    }
+	});
 };
 
 function makeEditable(){
@@ -46,7 +102,15 @@ function makeImgEditable($img){
 				function() {
 					$("#hover-delete-button").remove();
 				}
-			);
+			)
+			.on("resize", function() {
+				editTimeout.setup();
+			})
+			.on("drag", function() {
+				editTimeout.setup();
+			});
+
+	editTimeout.setup();
 }
 
 function makeCaptionEditable($div){
@@ -136,53 +200,8 @@ $(function() {
 	
 	$("#savePage").click(function(){
 		$("#savePage").button('loading');
-		var positions = [];
-		
-		$("#page img").each(function(){
-			var $img = $(this);
-			var x = parseInt($img.parent().css("left"));
-			var y = parseInt($img.parent().css("top"));
-			positions.push({
-				"image": $img.attr("src"),
-				"w": parseInt($img.css("width")),
-				"h": parseInt($img.css("height")),
-				"x": x ? x : 0,
-				"y": y ? y : 0,
-				"z": 1
-			});
-		});
-		
-		$("#page .caption").each(function(){
-			var $caption = $(this);
-			var x = parseInt($caption.css("left"));
-			var y = parseInt($caption.css("top"));
-			positions.push({
-				"caption": {
-	       			"content": $caption.text(),
-	       			"font": $caption.data("font")
-	       		},
-				"w": parseInt($caption.css("width")),
-				"h": parseInt($caption.css("height")),
-				"x": x ? x : 0,
-				"y": y ? y : 0,
-				"z": 1
-			});
-		});
-
-		var obj = { "positions" : positions };
-		console.log(obj);
-		
-		$.ajax({
-		   	url: "/album/"+album+"/"+page+"/json/",
-		    type: 'POST',
-		    contentType: 'application/json; charset=utf-8',
-		    data: JSON.stringify(obj),
-		    dataType: 'text',
-		    success: function(result) {
-		        console.log("page saved!");
-		        $("#savePage").button('reset');
-		    }
-		});
+		savePage();
+		$("#savePage").button('reset');
 	});
 	
 	$("#deletePage").click(function () {
