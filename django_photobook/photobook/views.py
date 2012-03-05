@@ -22,17 +22,18 @@ from forms import *
 # Photobook project imports
 from photobook.models import *
 
+'''Index'''
 class Index(TemplateView):
     template_name = 'photobook/index.html'
 	
-# List view for Albums
+''''List view for all Albums'''
 class AlbumListView(ListView):
     model = Album
     template_name = 'photobook/album_list.html'
     context_object_name = "album_list"
  
     
-# Detail view for Albums
+'''Detail view for Albums, shows the first page of the album with javascript'''
 class AlbumDetailView(DetailView):
     context_object_name = "album"
     
@@ -49,19 +50,20 @@ class AlbumDetailView(DetailView):
         context['is_owner'] = is_owner
         return context
 
-#Single page view
+'''Not in use: view of a single page (without Javascript)'''
 def page_detail(request, album, page_number):
     album_pages = Page.objects.filter(album__id=album)
     page = album_pages.get(number=page_number)
     is_owner = Album.objects.get(id=album).user.id == request.user.id
     return render_to_response('photobook/page_detail.html', {'page': page, "is_owner": is_owner}, context_instance=RequestContext(request))
-#List view for users
+
+'''List view for all users'''
 class UserListView(ListView):
     model = User
     template_name = 'photobook/user_list.html'
     context_object_name = "user_list"
     
-# Register view
+'''Register view'''
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -78,7 +80,8 @@ def register(request):
     return render_to_response("registration/register.html", {
         'form' : form
     }, context_instance=RequestContext(request))
-    
+
+'''View of a users page, containing all albums created by that user'''    
 def user_detail_view(request, user_name):
     is_owner = False;
     if (request.user.is_authenticated() and request.user.username == user_name):
@@ -87,7 +90,7 @@ def user_detail_view(request, user_name):
     album_list = Album.objects.filter(user=page_owner)
     return render_to_response('photobook/user_detail_view.html', {'page_owner' : page_owner, 'album_list' : album_list, 'is_owner' : is_owner }, context_instance=RequestContext(request))
 
-
+'''Get or saves a page and its positions in JSON Format'''
 def get_or_save_page(request, album_id, page_number):
     #if post, save the page and positions
     if request.method == 'POST':
@@ -108,7 +111,13 @@ def get_or_save_page(request, album_id, page_number):
         #if the page does exist, delete all position objects 
         try: 
             page = Page.objects.get(number=page_number, album__id=album_id)
+            for position in page.positions.all():
+                if(position.image):
+                    position.image.delete()
+                if(position.caption):
+                    position.caption.delete()
             page.positions.all().delete()
+            
         #else create a new page
         except Page.DoesNotExist:
             page = Page(
@@ -131,7 +140,7 @@ def get_or_save_page(request, album_id, page_number):
         #return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
 
 
-    #else get page
+    #else get the page
     
     ''' returns a json in following format:
     {"page": {
@@ -160,6 +169,7 @@ def get_or_save_page(request, album_id, page_number):
     except Page.DoesNotExist:
         return HttpResponse(json.dumps({'success': False, 'message': 'Page does not exist.'}), status=404, content_type='application/json')    
     
+    #go through all positions and create page_information
     positions = []
     for p in page.positions.all():
         image = None
@@ -269,7 +279,7 @@ def add_positions(data, album, page):
     
     return HttpResponse(json.dumps({'success': True, 'message': 'OK'}), content_type='application/json')
 
-        
+'''Delete album'''
 def delete_album(request, album_id):
     logged_user = request.user
     album_owner = Album.objects.get(id=album_id).user
@@ -280,6 +290,7 @@ def delete_album(request, album_id):
     else:
         return HttpResponseRedirect(reverse('photobook:index'))
 
+'''Delete page'''
 def delete_page(request, album, page_number):
     logged_user = request.user
     album_pages = Page.objects.filter(album__id=album)
@@ -298,6 +309,7 @@ def delete_page(request, album, page_number):
     else:
        return HttpResponseRedirect(reverse('photobook:index'))
 
+'''Create new album'''
 @login_required    
 def create_album(request):
     if request.method == 'POST':
@@ -330,6 +342,7 @@ def create_album(request):
                 'form' : form
             }, context_instance=RequestContext(request))
 
+'''Log out'''
 def logout_view(request):
     logout(request)
     logged_out = True

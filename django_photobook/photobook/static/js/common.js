@@ -42,6 +42,7 @@ function loadPage(album,page,callback){
 	console.log("[common.js] loadPage "+album+","+page);
 	
 	updateArrows();
+	updatePageNumbering();
 	$("#loader").show();
 	$("#page").empty();
 	
@@ -98,4 +99,8 @@ function updateArrows(){
 	} else {
 		$("#previous").removeClass("disabled");
 	}
+}
+
+function updatePageNumbering(){
+	$("#page-numbering").html(page + "/" + pages);
 }

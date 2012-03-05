@@ -92,3 +92,8 @@ Reused from Antti's previous project.
 	50%{opacity:1;background-color:#111}
 	100%{opacity:0.3;}
 }
+
+#page-numbering{
+	color:grey;
+	margin: 5px;
+}
