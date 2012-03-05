@@ -30,7 +30,7 @@ var pages = {{ page_list|length }};
 <div class="btn-group">
 <a id="addImage" data-toggle="modal" href="#addImageModal" class="btn"><i class="icon-picture"></i> Add image</a>
 <a id="addText" href="#" class="btn"><i class="icon-pencil"></i> Add text</a>
-<a id="deleteImage" href="#" class="btn "><i class="icon-trash "></i> Delete current Image</a>
+<!-- <a id="deleteImage" href="#" class="btn "><i class="icon-trash "></i> Delete current Image</a>-->
 </div>
 
 <div class="btn-group">
@@ -52,6 +52,7 @@ var pages = {{ page_list|length }};
 </div>
 
 <div id="pageContainer">
+
 	<a href="#" id="previous" class="arrow left"></a>
 	
 	<div id="pages" style="position: relative;">
@@ -62,8 +63,9 @@ var pages = {{ page_list|length }};
 			<div id='circle_3' class='circle'></div>
 		</div>
 	</div>
-	
+
 	<a href="#" id="next" class="arrow right"></a>
+	<div id="page-numbering"></div>
 </div>
 
 <div class="modal fade" id="addImageModal">

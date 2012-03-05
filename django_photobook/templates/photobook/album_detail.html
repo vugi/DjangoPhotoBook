@@ -37,7 +37,7 @@ $(function() {
 
 <a href="#" id="previous" class="arrow left"></a>
 
-<div id="pages" style="position: relative;">
+<div id="pages">
 	<article id="page" class="page" style="height: {{ album.height }}px; width: {{ album.width }}px;"></article>
 	<div id='loader'>
 		<div id='circle_1' class='circle'></div>
@@ -51,13 +51,4 @@ $(function() {
 
 </div>
 
-<!--
-{% for page in page_list %}
-    <div>
-    	<a href="{{ page.get_absolute_url }}"> {{ page.number }} </a>
-    </div>
-{% empty %}
-    No pages added.
-{% endfor %}
--->
 {% endblock %}

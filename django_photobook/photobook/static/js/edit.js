@@ -8,21 +8,42 @@
  */
 
 var pageChangeCallback = function(){
-	makeEditable();
+	makeEditable($("#page img"));
 };
 
-/* Set images resizable and draggable */
-function makeEditable(){
+
+/* Set images resizable, draggable and movable */
+function makeEditable($img){
 	$("#page img")
 		.resizable({aspectRatio: true})
 		.parent().draggable({ containment: 'parent' });
     $( "#page img" ).resizable( "option", "containment", "parent" );
+    
+    //add a remove button on hover
+    $img.parent().hover(
+    	function() {
+			var $button = $("<div>")
+			.attr({id: 'hover-delete-button'})
+			.appendTo($(this));
+			var $icon = $("<i>")
+			.attr({class: 'icon-remove'})
+			.appendTo($button);
+			
+			$("#hover-delete-button").click(function() {
+				console.log("delete", $(this).siblings("img"));
+				$(this).siblings("img").remove();
+			});
+		},
+		function() {
+			$("#hover-delete-button").remove();
+		}
+    );
 }
 
 $(function() {
 	var $currentPicture = undefined;
 	loadPage(album,page,function(){
-		makeEditable();
+		makeEditable($("#page img"));
 	});
 	
 	$("#addImageModalBtn").click(function(){
@@ -33,7 +54,7 @@ $(function() {
                    id: 'addedImage'})
 			.appendTo("#page");
 
-		makeEditable();
+		makeEditable($img);
 	});
     
     $(document).on("click", "#foundPicture", function(){
@@ -44,7 +65,7 @@ $(function() {
                    id: 'addedImage'})
 			.appendTo("#page");
 
-		makeEditable();
+		makeEditable($img);
     });
     
     $(document).on("click", "#addedImage", function(){
@@ -52,11 +73,11 @@ $(function() {
         $currentPicture = $(this)
     });
     
-    $("#deleteImage").click(function() {
+    /*$("#deleteImage").click(function() {
         if ($currentPicture!== undefined) {
             $currentPicture.remove();
         }
-    });
+    });*/
 	
 	$("#newImageUrl").bind("propertychange keyup input paste", function(){
 		console.log("changed");
@@ -96,6 +117,7 @@ $(function() {
 				"z": 1
 			});
 		});
+
 		
 		var obj = { "positions" : positions };
 		console.log(obj);
@@ -134,7 +156,7 @@ $(function() {
 		    }
 		});
 	});
-	
+
 	/* "caption": {
 	       			"content": "Cute puppies ~<3",
 	       			"font": "foobar"

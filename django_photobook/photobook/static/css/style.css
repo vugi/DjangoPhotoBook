@@ -96,4 +96,18 @@ Reused from Antti's previous project.
 #page-numbering{
 	color:grey;
 	margin: 5px;
+	display: block;
+}
+
+#hover-delete-button{
+	background: white; 
+	position:absolute;
+	right:0;
+	top:0; 
+	height: 18px; 
+	width: 18px;
+	margin: 3px;
+	-webkit-border-radius: 2px;
+  	-moz-border-radius: 2px;
+  	border-radius: 2px;
 }
