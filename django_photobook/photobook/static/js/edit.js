@@ -50,6 +50,22 @@ function savePage(){
 		});
 	});
 
+	$("#page .caption").each(function(){
+		var $caption = $(this);
+		var x = parseInt($caption.css("left"));
+		var y = parseInt($caption.css("top"));
+		positions.push({
+			"caption": {
+				"content": $caption.text(),
+				"font": $caption.data("font")
+			},
+			"w": parseInt($caption.css("width")),
+			"h": parseInt($caption.css("height")),
+			"x": x ? x : 0,
+			"y": y ? y : 0,
+			"z": 1
+		});
+	});
 	
 	var obj = { "positions" : positions };
 	console.log(obj);
