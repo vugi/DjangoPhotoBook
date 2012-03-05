@@ -191,7 +191,7 @@ $(function() {
 		addImage($("#newImageUrl").val());
 	});
     
-    $(document).on("click", "#foundPicture", function(){
+    $(document).on("click", ".foundPicture", function(){
     	addImage($(this).attr("src"));
     });
 	
@@ -216,9 +216,8 @@ $(function() {
         $.getJSON(url + "&format=json&jsoncallback=?", function(data) {
             $.each(data.photos.photo, function(i, item){
                 src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_m.jpg";
-                var img ='<img id="foundPicture" data-dismiss="modal" src="' + src + '"alt="' + item.title + '"width="100" height="100" />';
+                var img ='<img class="foundPicture thumbnail" data-dismiss="modal" src="' + src + '"alt="' + item.title + '"width="100" height="100" />';
                 $("#results").append(img);
-                if ( i == 3 ) return false;
             });
         });
     });

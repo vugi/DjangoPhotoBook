@@ -121,6 +121,11 @@ Reused from Antti's previous project.
 	top:0;
 }
 
+.foundPicture {
+	display: inline;
+	margin: 5px;
+}
+
 /* Captions */
 
 .caption {
