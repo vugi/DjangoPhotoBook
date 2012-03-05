@@ -328,7 +328,7 @@ def create_album(request):
                     number = 1
                 )
                 page.save()
-                return HttpResponseRedirect(reverse('photobook:user_detail_view', args=(request.user.username,)))
+                return HttpResponseRedirect(reverse('photobook:edit_album_view', args=(new_album.id,)))
             except ValidationError, e:
                 print "Failed to validate the model object."
                 return HttpResponseRedirect(reverse('photobook:index'))
