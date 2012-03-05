@@ -93,6 +93,8 @@ Reused from Antti's previous project.
 	100%{opacity:0.3;}
 }
 
+/* Page edit / view */
+
 #page-numbering{
 	color:grey;
 	margin: 5px;
@@ -139,4 +141,10 @@ Reused from Antti's previous project.
 .style-3 {
 	font-size: 20px;
 	line-height: 22px;
+}
+
+/* Album list */
+
+.thumbnail .details {
+	padding: 9px;
 }

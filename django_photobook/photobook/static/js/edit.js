@@ -195,9 +195,19 @@ $(function() {
     	addImage($(this).attr("src"));
     });
 	
+	// Show preview image when a url is typed / pasted
 	$("#newImageUrl").bind("propertychange keyup input paste", function(){
-		console.log("#newImageUrl changed");
-		$("#previewImg").attr("src",$("#newImageUrl").val());
+		var url = $("#newImageUrl").val();
+		if(url){
+			console.log(url, $("#previewImg"))
+			if($("#previewImg").length > 0){
+				$("#previewImg").attr("src",url);
+			} else {
+				$('<img id="previewImg" class="thumbnail" alt="preview" src="'+url+'" />').appendTo("#urlPane form");
+			}
+		} else {
+			$("#previewImg").remove();
+		}
 	});
     
     $("#searchBtn").click(function() {

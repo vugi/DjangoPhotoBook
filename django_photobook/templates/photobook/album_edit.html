@@ -40,7 +40,7 @@ var pageEdited = false;
 </div>
 
 <div class="btn-group">
-<a id="addPage" href="../" class="btn btn-primary" style=""><i class="icon-ok icon-white"></i> Done</a>
+<a id="done" href="../" class="btn btn-primary" style=""><i class="icon-ok icon-white"></i> Done</a>
 </div>
 </div>
 
@@ -76,20 +76,18 @@ var pageEdited = false;
   <div class="modal-body">
     
     <ul class="nav nav-tabs">
-	  <li class="active" ><a href="#url" data-toggle="tab">URL</a></li>
-	  <li><a href="#flickr" data-toggle="tab">Flickr</a></li>
-	  <li><a href="#other" data-toggle="tab">Other</a></li>
+	  <li class="active" ><a href="#urlPane" data-toggle="tab">URL</a></li>
+	  <li><a href="#flickrPane" data-toggle="tab">Flickr</a></li>
 	</ul>
 	 
 	<div class="tab-content">
-	  <div class="tab-pane active" id="url">
+	  <div class="tab-pane active" id="urlPane">
 	  	<form class="well">
 	  		<label>Full image URL:</label>
    	 		<input id="newImageUrl" type="text" value="" style="width:100%" />
-   	 		<img id="previewImg" alt="preview" />
    	 	</form>
 	  </div>
-	  <div class="tab-pane" id="flickr">
+	  <div class="tab-pane" id="flickrPane">
 	  	<form class="well">
 	  		<label>Search through Flickr</label>
    	 		<input id="search" type="text" value="" style="width:100%" />
@@ -97,9 +95,6 @@ var pageEdited = false;
    	 	</form>
         <div id="results">
         </div>
-	  </div>
-	  <div class="tab-pane" id="other">
-	  	Some other input method as well?
 	  </div>
 	</div>
     
@@ -118,20 +113,20 @@ var pageEdited = false;
   <div class="modal-body"> 
 	<form class="well">
 		<label>Text:</label>
-		<input id="newCaption" type="text" value="Hello World" style="width:100%" />
+		<input id="newCaption" type="text" value="" style="width:100%" />
 		
 		<label>Style:</label>
 		<label class="radio">
 			<input type="radio" name="styleSelect" value="style-1" checked>
-			<div class="captionPreview style-1">Hello World</div>
+			<span class="captionPreview style-1">Hello World</span>
 		</label>
 		<label class="radio">
 			<input type="radio" name="styleSelect" value="style-2">
-			<div class="captionPreview style-2">Hello World</div>
+			<span class="captionPreview style-2">Hello World</span>
 		</label>
 		<label class="radio">
 			<input type="radio" name="styleSelect" value="style-3">
-			<div class="captionPreview style-3">Hello World</div>
+			<span class="captionPreview style-3">Hello World</span>
 		</label>
 	</form> 
   </div>

@@ -18,15 +18,15 @@
 <li class="span3">
 <a href="{{ album.get_absolute_url }}" class="thumbnail"> 
 <img src="http://placehold.it/260x180" alt="">
-<div class="caption">
+<div class="details">
   <h5>{{ album.name }}</h5>{{album.pub_date}} 
 </div>
 </a>       
-</li>
-          
+</li>     
 {% empty %}
-    No albums published.
+    <li>No albums published.</li>
 {% endfor %}
+</ul>
 
 {% endblock %}
 

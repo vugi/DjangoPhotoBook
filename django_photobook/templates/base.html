@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" />
     
-    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
 
 	{% block header %}
@@ -29,7 +28,7 @@
 			{% block nav %}
 				{% block nav_index %}<li id="menuIndex"><a href="{% url photobook:index %}">Home</a></li>{% endblock %} 
 				{% if user.username %} 
-					{% block nav_youralbums %}<li id="menuUser"><a href="{% url photobook:user_detail_view user.username %}">Your albums</a></li>{% endblock %}
+					{% block nav_youralbums %}<li id="menuYourAlbums"><a href="{% url photobook:user_detail_view user.username %}">Your albums</a></li>{% endblock %}
 				{% endif %}
 				{% block nav_list %}<li id="menuList"><a href="{% url photobook:album_list_view %}">All albums</a></li>{% endblock %}
 				{% block nav_user %}<li id="menuUser"><a href="{% url photobook:user_list_view %}">Users</a></li>{% endblock %}
